@@ -1,0 +1,33 @@
+{
+  "name": "tumsa",
+  "version": "0.0.2",
+  "scripts": {
+    "ng": "ng",
+    "start": "node ./bin/www",
+    "build": "ng build",
+    "test": "ng test",
+    "dev": "nodemon --watch . ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "latest",
+    "bcrypt": "latest",
+    "core-js": "2.6.9",
+    "express": "latest",
+    "express-session": "latest",
+    "morgan": "^1.9.1",
+    "request": "2.88.0",
+    "serve-favicon": "latest",
+    "jquery": "latest",
+    "jquery.easing": "1.4.1",
+    "bootstrap": "4.3.1",
+    "cookie-parser": "latest",
+    "angular": "1.8.0",
+    "@angular/core": "7.2.10",
+    "@angular/common": "7.2.10",
+    "zone.js": "~0.8.26",
+    "ng-table": "3.0.1",
+    "docker-secrets-nodejs": "^1.0.5",
+    "ejs": "2.7.1",
+    "pg": "8.3.0"
+  }
+}
