@@ -1,5 +1,5 @@
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul ng-controller="HomeCtl" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/index">
@@ -67,12 +67,12 @@
       <hr class="sidebar-divider">
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+      <div ng-show="current_user.perfil == 'Admins'" class="sidebar-heading">
         Administracion
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item" ng-show='current_user.perfil == "Admins"'>
         <a class="nav-link" href="/users">
           <i class="fas fa-fw fa-users"></i>
           <span>Usuarios</span>
@@ -80,7 +80,7 @@
       </li>
 
       <!-- Nav Item - Charts -->
-      <li class="nav-item">
+      <li class="nav-item" ng-show="current_user.perfil == 'Admins'">
         <a class="nav-link" href="charts.html">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Configuracion</span></a>

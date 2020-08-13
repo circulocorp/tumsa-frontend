@@ -26,8 +26,17 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/getsession', function(req, res, next) {
-  console.log(req.session.user);
   res.status(200).json(req.session.user);
+});
+
+router.get('/profiles', function(req,res,next){
+  var sql = "SELECT * FROM profiles";
+  pool.query(sql, (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    res.status(200).json(results.rows);
+  });
 });
 
 router.get('/users', function(req,res, next){
@@ -56,7 +65,7 @@ router.post('/users', function(req, res, next){
 router.patch('/users/:nid', function(req, res, next){
   var data = req.body;
   var sql = 'UPDATE users set password=$2,name=$3,profile=$4,blocked=$5,updated=NOW() where nid=$1';
-  pool.query(sql, [data.nid,data.password,data.name,data.profile,data.blocked], 
+  pool.query(sql, [req.params.nid,data.password,data.name,data.profile,data.blocked], 
     (error, results) => {
     if (error) {
           console.log(error);
@@ -69,6 +78,28 @@ router.get('/points', function(req, res, next){
   var sql = "SELECT * FROM controlpoints";
   pool.query(sql, (error, results) => {
     if (error) {
+      console.log(error);
+    }
+    res.status(200).json(results.rows);
+  });
+});
+
+router.post('/points', function(req, res, next){
+  var data = req.body;
+  var sql = "INSERT INTO controlpoints (name,blocked,created) values($1,0,NOW())";
+  pool.query(sql, [data.name,data.alias],(error,results)=> {
+    if(error){
+      console.log(error);
+    }
+    res.status(200).json(results.rows);
+  });
+});
+
+router.patch('/points:id', function(req, res, next){
+  var data = req.body;
+  var sql = "update controlpoints set name=$2,blocked=$3 where id=$1";
+  pool.query(sql, [req.params.id,data.name,data.alias],(error,results)=> {
+    if(error){
       console.log(error);
     }
     res.status(200).json(results.rows);

@@ -22,7 +22,7 @@ var sessionChecker = (req, res, next) => {
    if (req.session && req.session.user) {
         next()
     } else {
-        res.render('login');
+      res.render('login');
     }    
 };
 
@@ -36,7 +36,13 @@ router.get('/', sessionChecker, (req,res) => {
 });
 
 router.get('/users', sessionChecker, (req, res) =>{
-  res.render('users');
+  var current = req.session.user;
+  if(current.perfil == "Admins"){
+    res.render('users');
+  }else{
+    res.render('404');
+  }
+  
 });
 
 router.post('/login', (req, res) => {
