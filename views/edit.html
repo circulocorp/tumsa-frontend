@@ -24,12 +24,8 @@
           <p class="mb-4"></p>
           <form role="form" method="post" action="/users/:nid">
             <div class="form-group">
-              <label for="username">Usuario</label>
-              <input type="text" class="form-control" value="" name="username" required>
-            </div>
-            <div class="form-group">
               <label for="password">Contraseña</label>
-              <input type="text" class="form-control" value="" name="password" required>
+              <input type="password" class="form-control" value="" name="password" required>
             </div>
             <div class="form-group">
               <label for="name">Nombre</label>
@@ -38,6 +34,12 @@
             <div class="form-group">
               <label for="profile">Perfil</label>
               <input type="text" class="form-control" value="" name="profile" >
+            </div>
+            <div class="form-check">
+              <input type="checkbox" name="blocked" class="form-check-input" id="Check1">
+              <label class="form-check-label" for="Check1">Bloqueado</label>
+          
+              
             </div>
           <input type="hidden" name="nid" value="req.params.nid">
             <button type="submit" class="btn btn-primary">Actualizar</button>

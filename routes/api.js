@@ -51,7 +51,7 @@ router.get('/users', function(req,res, next){
 
 router.get('/users/:nid', function(req,res, next){ 
   var data = req.body;
-	var sql = "SELECT username,password,name,profile FROM users where nid=$1";
+	var sql = "SELECT password,name,profile,blocked FROM users where nid=$1";
 	pool.query(sql, [data.nid],(error, results) => {
     if (error) {
       console.log(error);
