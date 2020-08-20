@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tumsa">
+
+  <head>
+
+    <% include header.html %>
+
+  </head>
+
+  <body id="page-top" >
+
+    <div id="wrapper">
+    
+    <% include sidebar.html %>     
+
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <div id="content">
+          <% include navbar.html %> 
+
+           <div class="container-fluid">
+
+           <h1 class="h3 mb-2 text-gray-800">Actualizar datos</h1>
+          <p class="mb-4"></p>
+          <form role="form" method="post" action="/users/:nid">
+            <div class="form-group">
+              <label for="password">Contraseña</label>
+              <input type="password" class="form-control" value="" name="password" required>
+            </div>
+            <div class="form-group">
+              <label for="name">Nombre</label>
+              <input type="text" class="form-control" value="" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="profile">Perfil</label>
+              <input type="text" class="form-control" value="" name="profile" >
+            </div>
+            <div class="form-check">
+              <input type="checkbox" name="blocked" class="form-check-input" id="Check1">
+              <label class="form-check-label" for="Check1">Bloqueado</label>
+          
+              
+            </div>
+          <input type="hidden" name="nid" value="req.params.nid">
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+          </form>
+        
+        </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+             <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Tumsa 2020</span>
+          </div>
+        </div>
+      </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+   <% include scripts.html %>
+    <script src="/javascript/dashboard.js"></script>
+
+
+  </body>
+
+</html>

@@ -67,21 +67,25 @@ app.controller('UsuariosCtl', function ($scope, $http) {
     
   $scope.user = {};
 
-	$scope.editUser = function(user){
-		$scope.user = user;
-		$('#modalvehicleForm').modal();
+	$scope.editUser = function(nid){
+		$scope.user = users;
+    $('#modalvehicleForm').modal();
+    $http.patch('/users/'+nid, vehicle).then(function(response){
+      $scope.refreshUsers();
+      $scope.cancelUsers();
+    });
 	}
 
   $scope.saveUsers = function(){
     var user = $scope.user;
-    $http.patch('./api/vehicles', vehicle).then(function(response){
+    $http.post('/users', user).then(function(response){
       $scope.refreshUsers();
       $scope.cancelUsers();
     });
   }
 
   $scope.refreshUsers = function(){
-    $http.get('./api/users').then(function(response){
+    $http.get('/users').then(function(response){
       $scope.tableParams = new NgTableParams({filter:{}}, { dataset: response.data });
     });
   }
