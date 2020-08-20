@@ -39,17 +39,28 @@ router.get('/profiles', function(req,res,next){
   });
 });
 
-router.get('/users', function(req,res, next){
+router.get('/users', function(req,res, next){ 
 	var sql = "SELECT us.*,pro.name as perfil FROM users us,profiles pro where pro.nid = us.profile";
 	pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    res.status(200).json(results);
 	});
 });
 
-router.post('/users', function(req, res, next){
+router.get('/users/:nid', function(req,res, next){ 
+  var data = req.body;
+	var sql = "SELECT password,name,profile,blocked FROM users where nid=$1";
+	pool.query(sql, [data.nid],(error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    res.status(200).json(results);
+	});
+});
+
+router.post('/users', function(req, res, next){ 
   var data = req.body;
   var sql = 'INSERT INTO users (nid,username, password, name, email, profile, blocked, created, updated) \
         values(uuid_generate_v4(),$1,$2,$3,$1,$4,0,NOW(),NOW()) RETURNING nid';
@@ -62,7 +73,7 @@ router.post('/users', function(req, res, next){
   });
 });
 
-router.patch('/users/:nid', function(req, res, next){
+router.patch('/users/:nid', function(req, res, next){  
   var data = req.body;
   var sql = 'UPDATE users set password=$2,name=$3,profile=$4,blocked=$5,updated=NOW() where nid=$1';
   pool.query(sql, [req.params.nid,data.password,data.name,data.profile,data.blocked], 
@@ -95,7 +106,7 @@ router.post('/points', function(req, res, next){
   });
 });
 
-router.patch('/points:id', function(req, res, next){
+router.patch('/points/:id', function(req, res, next){
   var data = req.body;
   var sql = "update controlpoints set name=$2,blocked=$3 where id=$1";
   pool.query(sql, [req.params.id,data.name,data.alias],(error,results)=> {

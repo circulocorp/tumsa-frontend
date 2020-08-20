@@ -35,7 +35,7 @@
                   </div>
                   <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Entrar">
                 </form>
-                <a href="#!" class="forgot-password-link">Olvide mi password</a>
+                <a  data-toggle="modal" href="#myModal" class="forgot-password-link">Olvide mi password</a>
                 <nav class="login-card-footer-nav">
                   <a href="#!">Terminos y condiciones</a>
                   <a href="#!">Politica de privacidad</a>
@@ -71,6 +71,30 @@
         </div>
       </div> -->
     </div>
+
+            <!-- Modal  {{users.nid}}-->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span>Recuperar constraseña</span> 
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+<form role="form" method="post" action="/users">
+  <div class="form-group">
+    <label for="name">Correo Electrónico</label>
+    <input type="text" class="form-control" name="email" required>
+  </div>
+
+<br></br>
+  <button type="submit" class="btn btn-primary">Aceptar</button>
+</form>
+        </div>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   </main>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
