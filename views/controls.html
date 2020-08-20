@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tumsa">
+
+  <head>
+
+    <% include header.html %>
+
+  </head>
+
+  <body id="page-top" ng-controller="PointsCtl">
+
+    <div id="wrapper">
+    
+    <% include sidebar.html %>     
+
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <div id="content">
+          <% include navbar.html %> 
+
+           <div class="container-fluid">
+
+           <h1 class="h3 mb-2 text-gray-800">Puntos de Control</h1>
+          <p class="mb-4"></p>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="btn-group" role="group" aria-label="...">
+                <button type="button" ng-show='pointForm==0' ng-click='newPoint()' class="btn btn-default">Crear</button>
+                <button type="button" ng-show='pointForm==1' ng-click='savePoint()' class="btn btn-default">Guardar</button>
+                <button type="button" ng-show='pointForm==1' ng-click='cancelPoint()' class="btn btn-default">Cancelar</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>&nbsp;#</th>
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Fecha creado</th>
+                      <th>Activo</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dataset">
+                    <tr ng-repeat="point in points">
+                      <td>&nbsp;</td>
+                      <td>{{point.id}}</td>
+                      <td>{{point.name}}</td>
+                      <td>{{point.created}}</td>
+                      <td><input type="checkbox" {{point.checked}} data-toggle="toggle"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+             <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Tumsa 2020</span>
+          </div>
+        </div>
+      </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+   <% include scripts.html %>
+    <script src="/javascript/dashboard.js"></script>
+
+
+  </body>
+
+</html>

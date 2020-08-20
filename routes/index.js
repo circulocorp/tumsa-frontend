@@ -19,11 +19,26 @@ const pool = new Pool({
 
 
 var sessionChecker = (req, res, next) => {
-   if (req.session && req.session.user) {
+   //if (req.session && req.session.user) {
+        req.session.user = {
+              nid: '0f64a66d-476d-4a78-9ca8-b37624527916',
+              username: 'admin@gmail.com',
+              password: '0192023a7bbd73250516f069df18b500',
+              name: 'Administrator',
+              email: 'admin@gmail.com',
+              created: '2020-07-15T08:23:30.392Z',
+              updated: '2020-07-15T08:23:30.392Z',
+              lastlogin: null,
+              profile: '35579717-b026-4df9-af93-76edc60da84e',
+              blocked: '0',
+              access: {},
+              perfil: 'Admins'
+          }
+  //}
         next()
-    } else {
-      res.render('login');
-    }    
+    //} else {
+     // res.render('login');
+    //}    
 };
 
 router.get('/', sessionChecker, (req,res) => {
@@ -42,7 +57,21 @@ router.get('/users', sessionChecker, (req, res) =>{
   }else{
     res.render('404');
   }
-  
+});
+
+router.get('/controls', sessionChecker, (req, res) =>{
+  var current = req.session.user;
+  res.render('controls');
+});
+
+router.get('/rutas', sessionChecker, (req, res) =>{
+  var current = req.session.user;
+  res.render('rutas');
+});
+
+router.get('/viajes', sessionChecker, (req, res) =>{
+  var current = req.session.user;
+  res.render('viajes');
 });
 
 router.post('/login', (req, res) => {
@@ -53,7 +82,7 @@ router.post('/login', (req, res) => {
       console.log(error);
     }
     if(results.rows && results.rows.length > 0){
-    	console.log(results.rows[0]);
+      console.log(results.rows[0]);
     	req.session.user = results.rows[0]
     }else{
     	req.session.error = "Acceso Denegado";
@@ -71,6 +100,8 @@ router.get('/logout', (req, res)=>{
      }
   });
 });
+
+
 
 
 module.exports = router;

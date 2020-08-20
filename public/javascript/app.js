@@ -41,12 +41,12 @@
 
 
 
-var app = angular.module('tumsa', ['ngTable']);
+var app = angular.module('tumsa', ['data-table']);
 
 
 //General controller
 
-app.controller('HomeCtl', function($scope, NgTableParams, $http){
+app.controller('HomeCtl', function($scope, $http){
 
   $scope.current_user = {};
 
@@ -63,7 +63,7 @@ app.controller('HomeCtl', function($scope, NgTableParams, $http){
 
 //Usuarios Controller
 
-app.controller('UsuariosCtl', function ($scope, NgTableParams, $http) {
+app.controller('UsuariosCtl', function ($scope, $http) {
     
   $scope.user = {};
 
@@ -94,104 +94,81 @@ app.controller('UsuariosCtl', function ($scope, NgTableParams, $http) {
   $scope.refreshUsers();
 });
 
-app.controller('ServiceACtl', function ($scope, NgTableParams, $http) {
+app.controller('PointsCtl', function ($scope, $http) {
 
-	$scope.account = {};
+	$scope.point = {};
+  $scope.pointForm = 0;
 
-  $scope.refreshAccounts = function(){
-  	$http.get('./api/serviceaccounts').then(function(response){
-  		$scope.tableParams = new NgTableParams({filter:{}}, { dataset: response.data });
+  $scope.refreshPoints = function(){
+  	$http.get('./api/points').then(function(response){
+  		$scope.points = response.data;
   	});
   }
 
-	$scope.newAccount = function(){
-		$scope.account = null;
-		$scope.account = {};
-		$('#modalaccountForm').modal();
-	}
-
-  $scope.saveAccount = function(){
-    var account = $scope.account;
-    console.log(account);
-    if(("_id" in account) == false){
-      $http.post('./api/serviceaccounts', account).then(function(response){
-        $scope.cancelAccount();
-      });
-    }else{
-      $http.patch('./api/serviceaccounts', account).then(function(response){
-        $scope.cancelAccount();
-      });
+	$scope.newPoint = function(){
+		$scope.point = {};
+    if($scope.pointForm == 0){
+      $scope.pointForm = 1;
+      var table = document.getElementById("dataset");
+      var tr = table.insertRow(0);
+      tr.setAttribute("id","newrow");
+      html = '<td>&nbsp;</td>';
+      html += '<td>&nbsp;</td>';
+      html += '<td><input type="text" id="pointname" placeholder="Nombre" class="form-control"></td>';
+      html += '<td>&nbsp;</td>';
+      html += '<td>&nbsp;</td>';
+      tr.innerHTML = html;
     }
-    $scope.refreshAccounts();
+		
+	}
+
+  $scope.savePoint = function(){
+    var point = {name: $('#pointname')[0].value}
+    $http.post('./api/points', point).then(function(response){
+      $scope.cancelPoint();
+    });
   }
-
-	$scope.editAccount = function(account){
-		$scope.account = account;
-		$('#modalaccountForm').modal();
+	$scope.cancelPoint = function(){
+	 $scope.refreshPoints();
+   var row = document.getElementById("newrow");
+   row.parentNode.removeChild(row);
+   $scope.pointForm = 0;
 	}
-
-	$scope.cancelAccount = function(){
-		$('#modalaccountForm').modal('hide');	
-	}
-  $scope.refreshAccounts();
+  $scope.refreshPoints();
 });
 
 
-app.controller('NotifiCtl', function($scope, NgTableParams, $http){
-  $scope.notification = {};
-  $scope.refreshNotifications = function(){
-    $http.get('./api/notifications').then(function(response){
-      $scope.tableParams = new NgTableParams({filter:{}}, { dataset: response.data });
+app.controller('RoutesCtl', function($scope, $http){
+  
+  $scope.optionz = {
+            rowHeight: 50,
+            headerHeight: 50,
+            footerHeight: 50,
+            scrollbarV: false,
+            columns: [
+              { name: "Name", prop: "name" },
+              { name: "Gender", prop: "gender" },
+              { name: "Company", prop: "company" }
+            ],
+            columnMode: 'force',
+            paging: {
+              externalPaging: true,
+              size: 10
+            },
+            onSort: (sorts) => {
+              console.log({ sorts });
+            }
+          };
+  $scope.dataset = [];
+
+  $scope.paging = function(offset, size){
+    $http.get('./api/routes').then(function(response){
+      console.log(response.data);
+      $scope.dataset = response.data;
+      $scope.optionz.paging.count = response.data.length;
     });
   }
 
-  $scope.newNotification = function(){
-    $scope.notification = null;
-    $scope.notification = {};
-    $('#modalnotificationForm').modal();
-  }
-
-  $scope.saveNotification = function(){
-    var notification = $scope.notification;
-    if(("_id" in notification) == false){
-      $http.post('./api/notifications', notification).then(function(response){
-        $scope.cancelNotification();
-      });
-    }else{
-      $http.patch('./api/notifications', notification).then(function(response){
-        $scope.cancelNotification();
-      });
-    }
-    $scope.refreshNotifications();
-  }
-
-  $scope.showAskDeleteNoti = function(notification){
-    $('#modalAskDeleteNoti').modal();
-    $scope.notification = notification;
-  }
-
-  $scope.deleteNotification = function(){
-    var notification = $scope.notification;
-    $http.delete('./api/notifications/'+notification["_id"]).then(function(response){
-        $scope.cancelAskDeleteNoti();
-        $scope.refreshNotifications();
-    });
-  }
-
-  $scope.editNotification = function(notification){
-    $scope.notification = notification;
-    $('#modalnotificationForm').modal();
-  }
-
-  $scope.cancelNotification = function(){
-   $('#modalnotificationForm').modal('hide'); 
-  }
-
-  $scope.cancelAskDeleteNoti = function(){
-    $scope.notification = {};
-   $('#modalAskDeleteNoti').modal('hide');
-  }
-  $scope.refreshNotifications();
 });
 
 app.controller('EmergencyCtl', function($scope,NgTableParams, $http){

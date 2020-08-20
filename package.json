@@ -27,6 +27,7 @@
     "zone.js": "~0.8.26",
     "ng-table": "3.0.1",
     "docker-secrets-nodejs": "^1.0.5",
+    "angular-data-table": "0.8.1",
     "ejs": "2.7.1",
     "pg": "8.3.0"
   }

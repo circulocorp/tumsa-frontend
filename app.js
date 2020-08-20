@@ -55,4 +55,8 @@ app.use(function(req, res, next){
 
 app.use('/', indexRouter);
 app.use('/api', api);
+
+app.get('*', function(req, res){
+  res.render('404');
+});
 module.exports = app;
