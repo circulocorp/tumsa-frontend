@@ -27,12 +27,33 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3">
               <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default">Crear</button>
+                <a href="./form_ruta" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>
+                &nbsp;
+                <a href="#" class="btn btn-primary" role="button" aria-pressed="true">Importar</a>
               </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                
+                <table ng-table="tableParams" show-filter="true" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>Nombre</th>
+                      <th>Tiempo Total</th>
+                      <th>Fecha Creado</th>
+                      <th>Activo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="route in $data">
+                      <td><a href="./form_ruta?id={{route.nid}}" role="button"><i class="fas fa-route"></i></a></td>
+                      <td>{{route.name}}</td>
+                      <td>{{route.total_time}} minutos</td>
+                      <td>{{route.created}}</td>
+                      <td>{{route.activo}}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

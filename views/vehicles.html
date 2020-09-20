@@ -8,7 +8,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
   </head>
 
-  <body id="page-top" ng-controller="PointsCtl">
+  <body id="page-top" ng-controller="VehiclesCtl">
 
     <div id="wrapper">
     
@@ -21,7 +21,7 @@
 
            <div class="container-fluid">
 
-           <h1 class="h3 mb-2 text-gray-800">Puntos de Control</h1>
+           <h1 class="h3 mb-2 text-gray-800">Camiones</h1>
           <p class="mb-4"></p>
 
           <!-- DataTales Example -->
@@ -37,15 +37,19 @@
                   <thead>
                     <tr>
                       <th>&nbsp;#</th>
-                      <th>Nombre</th>
-                      <th>Fecha creado</th>
+                      <th>Unidad</th>
+                      <th>Eco</th>
+                      <th>Placas</th>
+                      <th>Ultimo Reporte</th>
                     </tr>
                   </thead>
                   <tbody id="dataset">
-                    <tr ng-repeat="point in points">
-                      <td><button ng-click="map(point)" class="btn"><i class="fas fa-map-marked-alt"></i></button></td>
-                      <td>{{point.description}}</td>
-                      <td>{{point.utcLastModified}}</td>
+                    <tr ng-repeat="vehicle in vehicles">
+                      <td><button ng-click="map(vehicle)" class="btn"><i class="fas fa-map-marked-alt"></i></button></td>
+                      <td>{{vehicle.unit_Description}}</td>
+                      <td>{{vehicle.description}}</td>
+                      <td>{{vehicle.registration}}</td>
+                      <td><span class="badge badge-pill badge-{{vehicle.lastReportColor}}">{{vehicle.lastReport | date:'medium' }}</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -60,7 +64,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            {{point.description}}
+            Eco. {{vehicle.description}}
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>

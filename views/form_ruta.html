@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tumsa">
+
+  <head>
+
+    <% include header.html %>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+  </head>
+
+  <body id="page-top" ng-controller="RouteFormCtl" ng-init="checkRoute('<%= route %>')">
+
+    <div id="wrapper">
+    
+    <% include sidebar.html %>     
+
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <div id="content">
+          <% include navbar.html %> 
+
+           <div class="container-fluid">
+
+           <h1 class="h3 mb-2 text-gray-800">Rutas</h1>
+          <p class="mb-4"></p>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="btn-group" role="group" aria-label="...">
+                <a href="#" class="btn btn-primary" role="button" ng-click="saveRoute()" aria-pressed="true">Guardar</a>
+                &nbsp;
+                <a href="/rutas" class="btn btn-primary" role="button" aria-pressed="true">Cancelar</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+              <form>
+              <div class="row">
+              <div class="col-md-6 mb-6">  
+              <div class="row">
+              <div class="col-md-5 mb-5">
+                <label for="firstName">Nombre</label>
+                <input type="text" class="form-control" id="nombre"  ng-model="route.name"  placeholder="" value="" required style="width: 200px">
+                <input type="hidden" class="form-control" id="nid"  ng-model="route.nid" >
+                <div class="invalid-feedback">
+                  El nombre es obligatorio
+                </div>
+              </div>
+              <div class="col-md-4 mb-4">
+                <label for="firstName">Tiempo (Entre vueltas)</label>
+                <input type="text" class="form-control" id="nombre"  ng-model="route.time_rounds"  placeholder="" value="" required style="width: 200px">
+              </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 mb-12">
+                <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="btn-group" role="group" aria-label="...">
+                <select id="newPoint" ng-model="point">
+                  <option value="{{point}}" ng-repeat="point in points">{{point.description}}</option>
+                </select>
+                &nbsp;
+                Minutos:
+                <input type="text" value="0" id="newTime"/>
+                &nbsp;
+                <a href="#" ng-click="addPoint()" class="btn btn-primary" role="button" aria-pressed="true">Agregar</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered"  width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>Nombre</th>
+                      <th>Minutos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="point in locations">
+                      <td><a href="#" ng-click="removePoint(point,$index)" class="btn btn-danger" role="button" aria-pressed="true">Remove</a></td>
+                      <td>{{point.description}}</td>
+                      <td>{{point.time}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+              </div>
+              </div>
+            </div>
+              <div class="col-md-6 mb-6">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    Mapa
+                  </div>
+                  <div class="card-body">
+                    <div id="map" style="height: 400px; width:100%">
+                      &nbsp;
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+         <!-- Mapa -->
+        <div class="row-fluid">
+              <div class="span12">
+             <div class="row">
+              <div class="col-md-6 mb-6">
+                &nbsp;
+              </div>
+            </div>
+
+           </div>
+         </div>
+
+         <div class="row">
+              <div class="col-md-6 mb-6">
+                &nbsp;
+              </div>
+            </div>
+
+            </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+             <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Tumsa 2020</span>
+          </div>
+        </div>
+      </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+   <% include scripts.html %>
+    <script src="/javascript/dashboard.js"></script>
+
+
+  </body>
+
+</html>

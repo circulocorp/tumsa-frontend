@@ -7,7 +7,7 @@
 
   </head>
 
-  <body id="page-top" ng-controller="PointsCtl">
+  <body id="page-top" ng-controller="ViajesCtl">
 
     <div id="wrapper">
     
@@ -27,17 +27,43 @@
           <div class="card shadow mb-4">
             <div class="card-header py-3">
               <div class="btn-group" role="group" aria-label="...">
-                <button type="button" ng-show='pointForm==0' ng-click='newPoint()' class="btn btn-default">Crear</button>
+                <a href="/form_viaje" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>
+                &nbsp;
+                <a href="#" ng-click="showImport()" class="btn btn-primary" role="button" aria-pressed="true">Subir en Volumen</a>
               </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                
+                <table ng-table="tableParams" show-filter="true" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>Unidad</th>
+                      <th>Tiempo</th>
+                      <th>Inicio</th>
+                      <th>Fin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="departure in $data">
+                      <td><a href="./api/downloadReport/{{departure.nid}}" target="_blank" role="button"><i class="fas fa-file-pdf" title="Descargar Reporte"></i></a>&nbsp;
+                        <a href="#" role="button"><i class="fas fa-clone" title="Crear similar"></i></a>
+                      </td>
+                      <td>{{departure.vehicle.registration}}</td>
+                      <td>{{departure.total_time}}&nbsp;mins.</td>
+                      <td>{{departure.start_date | date:'medium' }}</td>
+                      <td>{{departure.end_date | date:'medium' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
 
+
+   <!-- Modal Import -->
+      <% include form_modal_viajes.html %> 
         </div>
         <!-- /.container-fluid -->
 

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tumsa">
+
+  <head>
+
+    <% include header.html %>
+  </head>
+
+  <body id="page-top" ng-controller="ViajeFormCtl" ng-init="checkViaje('<%= viaje %>')">
+
+    <div id="wrapper">
+    
+    <% include sidebar.html %>     
+
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <div id="content">
+          <% include navbar.html %> 
+
+           <div class="container-fluid">
+
+           <h1 class="h3 mb-2 text-gray-800">Viajes</h1>
+          <p class="mb-4"></p>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="btn-group" role="group" aria-label="...">
+                <a href="#" class="btn btn-primary" role="button" ng-click="saveViaje()" aria-pressed="true">Guardar</a>
+                &nbsp;
+                <a href="/viajes" class="btn btn-primary" role="button" aria-pressed="true">Cancelar</a>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+              <form autocomplete="off">
+              <div class="row">
+              <div class="col-md-3 mb-3">
+                <label for="firstName">Unidad</label>
+                <input type="hidden" class="form-control" id="nid"  ng-model="viaje.nid" >
+                <input type="text" class="form-control" id="vehicle"  ng-model="vehicle" ng-keyup="complete2(vehicle)" required style="width:200px">
+                <ul class="list-group">
+                  <li class="list-group-item" ng-repeat="vehicle in vehiclesList" ng-click="fillTextbox2(vehicle)">{{vehicle.registration}} - {{vehicle.description}}</li>
+                </ul>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="firstName">Ruta</label>
+                <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required style="width:200px">
+                <ul class="list-group">
+                  <li class="list-group-item" ng-repeat="route in routeList" ng-click="fillTextbox(route)">{{route.name}}</li>
+                </ul>
+              </div>
+              <div class="col-md-2 mb-2">
+                <label for="rol">Rol</label>
+                <select id="rol" ng-change="selectRole()" ng-model="role" class="form-control" style="width:150px">
+                  <option value="{{role}}" ng-repeat="role in roles">{{role.hour}}</option>
+                </select>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="firstName">Vueltas</label>
+                <input type="number" style="width:100px" class="form-control" id="vueltas" ng-model="viaje.rounds" placeholder="">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2 mb-2">
+                <label for="firstName">Punto Inicial</label>
+                <select id="rol" ng-model="viaje.start_point" class="form-control" style="width:150px">
+                  <option value="{{place.id}}" ng-repeat="place in places">{{place.description}}</option>
+                </select>
+              </div>
+              <div class="col-md-2 mb-2">
+                <label for="firstName">Punto Final</label>
+                <select id="rol" ng-model="viaje.end_point" class="form-control" style="width:150px">
+                  <option value="{{place.id}}" ng-repeat="place in places">{{place.description}}</option>
+                </select>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="firstName">Fecha Estimada Inicio</label>
+                 <input datetime-picker class="form-control" ng-model="viaje.start_date" date-format="yyyy-MM-dd HH:mm:ss" future-only/>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="firstName">Fecha Estimada Fin</label>
+                <input datetime-picker class="form-control" ng-model="viaje.end_date" date-format="yyyy-MM-dd HH:mm:ss" ng-click="change()"/>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <a href="#" class="btn btn-primary" role="button" ng-click="calc_route()" aria-pressed="true">Calcular</a>
+              </div>
+            </div>
+             <div class="row">
+              <div class="col-md-9 mb-9">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    Viaje Calculado
+                  </div>
+                <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Hora Estimada</th>
+                      <th>Vuelta</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="calc in calcs">
+                      <td>{{calc.description}}</td>
+                      <td>{{calc.hour}}</td>
+                      <td>{{calc.round}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+              </div>
+            </div>
+
+            </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+             <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Tumsa 2020</span>
+          </div>
+        </div>
+      </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+   <% include scripts.html %>
+    <script src="/javascript/dashboard.js"></script>
+
+
+  </body>
+
+</html>

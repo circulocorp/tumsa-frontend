@@ -1,0 +1,46 @@
+<div class="modal fade" id="tripModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: 600px">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            Crear Papeletas
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="card shadow mb-4">
+              <div class="card-body">
+              <div class="table-responsive">
+              <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-5 mb-5">
+                      <label for="ruta">Ruta</label>
+                      <select id="ruta" ng-model="ruta" class="form-control" style="width:200px">
+                          <option value="{{ruta.nid}}" ng-repeat="ruta in routes">{{ruta.name}}</option>
+                      </select>
+                    </div>
+                    
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3 mb-3">
+                      <label for="ruta">Fecha</label>
+                      <input type="text" class="form-control" style="width:200px"/>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3 mb-3">
+                      <label for="ruta">Camiones</label>
+                      <input type="text" style="width:300px" name="camiones" ng-model="camiones" class="form-control" />
+                    </div>
+                  </div>
+              </form>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="#" ng-click="crearPapeletas()" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>
+          </div>
+        </div>
+      </div>
+    </div>

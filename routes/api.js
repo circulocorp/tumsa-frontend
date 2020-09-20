@@ -6,8 +6,9 @@ var router = express.Router();;
 
 var pg_host = process.env.PG_HOST || "localhost";
 var pg_user = process.env.PG_USER || "postgres";
-var pg_pass = "admin1234";//secrets.get("pg_pass");
+var pg_pass = secrets.get("tumsa_dbpass");
 var pg_db = process.env.PG_DB || "tumsadev";
+var API_URL = process.env.API_URL || "http://127.0.0.1:8888/api"
 
 
 const Pool = require('pg').Pool;
@@ -39,13 +40,14 @@ router.get('/profiles', function(req,res,next){
   });
 });
 
+/*
 router.get('/users', function(req,res, next){ 
 	var sql = "SELECT us.*,pro.name as perfil FROM users us,profiles pro where pro.nid = us.profile";
 	pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results);
+    res.status(200).json(results.rows);
 	});
 });
 
@@ -84,45 +86,96 @@ router.patch('/users/:nid', function(req, res, next){
       res.status(200).json({"status": "ok"});
   });
 });
-
+*/
 router.get('/points', function(req, res, next){
-  var sql = "SELECT * FROM controlpoints";
-  pool.query(sql, (error, results) => {
-    if (error) {
-      console.log(error);
-    }
-    var points = [];
-    for(var i=0;i<results.rows.length;i++){
-      var point = results.rows[i];
-      point["checked"] = point.blocked == 0 ? "checked": "";
-      points.push(point);
-    }
-    console.log(points);
-    res.status(200).json(points);
+  var url = API_URL+'/places' 
+  var options = {
+      uri: url,
+      json: true,
+      form: req.session.user.token,
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    res.send(body);
   });
 });
 
-router.post('/points', function(req, res, next){
-  var data = req.body;
-  var sql = "INSERT INTO controlpoints (name,blocked,created) values($1,0,NOW())";
-  pool.query(sql, [data.name],(error,results)=> {
-    if(error){
-      console.log(error);
-    }
-    res.status(200).json(data);
+router.get('/vehicles', function(req,res,next){
+  var url = API_URL+'/allvehicles' 
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token},
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    res.send(body);
   });
 });
 
-router.patch('/points/:id', function(req, res, next){
-  var data = req.body;
-  var sql = "update controlpoints set name=$2,blocked=$3 where id=$1";
-  pool.query(sql, [req.params.id,data.name,data.alias],(error,results)=> {
-    if(error){
-      console.log(error);
-    }
-    res.status(200).json(data);
+router.get('/vehicles/position/:vehicle', function(req,res,next){
+  var vehicle = req.params.vehicle;
+  var url = API_URL+'/lastposition';
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token, "vehicle":vehicle},
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    res.send(body);
   });
 });
+
+
+router.get('/vehicles/search/:name', function(req,res,next){
+  var search = req.params.name;
+  var url = API_URL+'/vehicles?search='+search;
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token, "search":search},
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    res.send(body);
+  });
+});
+
+router.post('/downloadReport', function(req, res, next){
+  var data = req.body;
+  var url = API_URL+'/tripreport';
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token, "viaje":data.viaje},
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    res.send(body);
+  });
+});
+
+router.post('/uploadTrips', function(req, res, next){
+  var data = req.files;
+  console.log(data);
+});
+
+router.get('/downloadReport/:viaje', function(req, res, next){
+  var viaje = req.params.viaje;
+  var url = API_URL+'/tripreport';
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token, "viaje":viaje},
+      method: 'POST'
+  };
+  request(options).pipe(res);
+    //res.setHeader('Content-Length', body);
+    //res.setHeader('Content-Type', 'application/pdf');
+    //res.setHeader('Content-Disposition', 'attachment; filename=reporte.pdf');
+    //res.send(body);
+  //});
+});
+
+
+
+
 
 router.get('/routes', function(req, res, next){
   var sql = "SELECT * FROM routes";
@@ -130,34 +183,117 @@ router.get('/routes', function(req, res, next){
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    data = [];
+    for(var i=0;i<results.rows.length;i++){
+      var route = results.rows[i];
+      if(route["points"] && route["points"]["places"]){
+        var time = 0;
+        for(var j=0;j<route["points"]["places"].length;j++){
+          time += parseInt(route["points"]["places"][j]["time"]);
+        }
+        route["total_time"] = time;
+      }else{
+        route["total_time"] = 0;
+      }
+      if(route["status"] == 1){
+        route["activo"] = "Si";
+      }else{
+        route["activo"] = "No";
+      }
+      data.push(route);
+    };
+    res.status(200).json(data);
+  });
+});
+
+router.get('/routes/:nid', function(req, res, next){
+  var sql = "SELECT * FROM routes where nid=$1";
+  pool.query(sql, [req.params.nid], (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    data = [];
+    for(var i=0;i<results.rows.length;i++){
+      var route = results.rows[i];
+      if(route["points"] && route["points"]["places"]){
+        var time = 0;
+        for(var j=0;j<route["points"]["places"].length;j++){
+          time += parseInt(route["points"]["places"][j]["time"]);
+        }
+        route["total_time"] = time;
+      }else{
+        route["total_time"] = 0;
+      }
+      if(route["status"] == 1){
+        route["activo"] = "Si";
+      }else{
+        route["activo"] = "No";
+      }
+      data.push(route);
+    };
+    res.status(200).json(data);
+  });
+});
+
+router.get('/routes/name/:name', function(req, res, next){
+  var name = req.params.name;
+  var sql = "SELECT * FROM routes where name ilike '%"+name+"%'";
+  pool.query(sql, (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    data = [];
+    for(var i=0;i<results.rows.length;i++){
+      var route = results.rows[i];
+      if(route["points"] && route["points"]["places"]){
+        var time = 0;
+        for(var j=0;j<route["points"]["places"].length;j++){
+          time += parseInt(route["points"]["places"][j]["time"]);
+        }
+        route["total_time"] = time;
+      }else{
+        route["total_time"] = 0;
+      }
+      if(route["status"] == 1){
+        route["activo"] = "Si";
+      }else{
+        route["activo"] = "No";
+      }
+      data.push(route);
+    };
+    res.status(200).json(data);
   });
 });
 
 router.post('/routes', function(req,res,next){
   var data = req.body;
-  var sql = "INSERT INTO routes (name,rounds,created_by,created,status,points) values($1,$2,$3,NOW(),1,$4)";
-  pool.query(sql, [data.name,data.rounds,data.created_by,data.points],(error,results)=> {
+  var points = {"places": data.points};
+  console.log(points);
+  var sql = "INSERT INTO routes (nid, name,created_by,created,status,time_rounds,points) values(uuid_generate_v4(),$1,NULL,NOW(),1,$2,$3)";
+  pool.query(sql, [data.name,data.time_rounds,points],(error,results)=> {
     if(error){
       console.log(error);
+      res.status(500).json({"Status": "ERROR"});
     }
-    res.status(200).json(data);
+    console.log({"Status": "OK"});
+    res.status(200).json({"Status": "OK"});
   });
 });
 
-router.patch('/routes/:id',function(req,res,next){
+router.patch('/routes/:nid',function(req,res,next){
   var data = req.body;
-  var sql = "update routes set name=$2,rounds=$3,points=$4,status=$5 where id=$1";
-  pool.query(sql, [req.params.id,data.name,data.rounds,data.points,data.status],(error,results)=> {
+  var points = {"places": data.points};
+  var sql = "update routes set name=$2,points=$3,time_rounds=$4,status=$5 where nid=$1";
+  pool.query(sql, [req.params.nid,data.name,points,data.time_rounds,data.status],(error,results)=> {
     if(error){
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    res.status(200).json({"Status": "OK"});
   });
 });
 
-router.get('/depertures', function(req,res,next){
-  var sql = "SELECT * FROM depertures";
+router.get('/departures', function(req,res,next){
+  var sql = "SELECT * FROM departures order by created desc";
   pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
@@ -166,28 +302,93 @@ router.get('/depertures', function(req,res,next){
   });
 });
 
-router.post('/depertures', function(req,res,next){
-  var data = req.body;
-  var sql = "INSERT INTO depertures(name,route,operator,unit,created,start_date,end_date) \
-            values($1,$2,$3,NOW(),$4,NULL)";
-  pool.query(sql, [data.name,data.route,data.operator,data.unit,data.created,data.start_date],(error,results)=> {
-    if(error){
+router.get('/departures/:nid', function(req,res,next){
+  var sql = "SELECT * FROM departures where nid=$1 order by created desc";
+  pool.query(sql, [req.params.nid],(error, results) => {
+    if (error) {
       console.log(error);
     }
     res.status(200).json(results.rows);
   });
 });
 
-router.patch('/depertures/:id', function(req, res, next){
+router.post('/departures', function(req,res,next){
   var data = req.body;
-  var sql = "update depertures set name=$2,route=$3,operator=$4,unit=$5,end_date=$6 where id=$1";
-  pool.query(sql, [req.params.id,data.name,data.route,data.operator,data.unit,data.end_date],(error,results)=> {
+  start_date = new Date(data.start_date);
+  start_date.setHours(start_date.getHours(), start_date.getMinutes(), start_date.getSeconds(),0);
+  var sql = "INSERT INTO departures(nid,trip,vehicle,created,start_date,end_date,rounds,start_point,end_point,total_time,route) values(uuid_generate_v4(),$1,$2,NOW(),$3,$4,$5,$6,$7,$8,$9)";
+  pool.query(sql, [data.trip,data.vehicle,start_date,data.end_date,data.rounds,data.start_point,data.end_point,data.total_time,data.route],(error,results)=> {
     if(error){
+      console.log(error);
+    }
+    res.status(200).json({"Status":"OK"});
+  });
+});
+
+router.patch('/departures/:id', function(req, res, next){
+  var data = req.body;
+  var sql = "update departures set trip=$2,vehicle=$3,start_date=$4,end_date=$5,rounds=$6,total_time=$7,start_point=$8,end_point=$9 where id=$1";
+  pool.query(sql, [req.params.id,data.route,data.vehicle,data.start_date,data.end_date,data.rounds,data.start_point,data.end_point],(error,results)=> {
+    if(error){
+      console.log(error);
+    }
+    res.status(200).json({"Status":"OK"});
+  });
+});
+
+router.get('/roles', function(req,res,next){
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route order by ru.name,r.hour asc";
+  pool.query(sql, (error, results) => {
+    if (error) {
       console.log(error);
     }
     res.status(200).json(results.rows);
   });
 });
+
+router.get('/roles/:nid', function(req,res,next){
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and r.nid=$1 order by ru.name,r.hour asc";
+  pool.query(sql, [req.params.nid], (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    res.status(200).json(results.rows);
+  });
+});
+
+router.get('/roles/route/:route', function(req,res,next){
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and ru.nid=$1";
+  pool.query(sql, [req.params.route], (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    res.status(200).json(results.rows);
+  });
+});
+
+router.post('/roles', function(req,res,next){
+  var data = req.body;
+  var sql = "INSERT INTO roles(nid,hour,rounds,route) \
+            values(uuid_generate_v4(),$1,$2,$3)";
+  pool.query(sql, [data.hour, data.rounds, data.route],(error,results)=> {
+    if(error){
+      console.log(error);
+    }
+    res.status(200).json({"Status":"OK"});
+  });
+});
+
+router.patch('/roles/:id', function(req, res, next){
+  var data = req.body;
+  var sql = "update roles set hour=$2,rounds=$3,route=$4 where id=$1";
+  pool.query(sql, [req.params.id,data.hour,data.rounds,data.route],(error,results)=> {
+    if(error){
+      console.log(error);
+    }
+    res.status(200).json({"Status":"OK"});
+  });
+});
+
 
 
 module.exports = router;

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tumsa">
+
+  <head>
+
+    <% include header.html %>
+
+  </head>
+
+  <body id="page-top" ng-controller="RolesCtl">
+
+    <div id="wrapper">
+    
+    <% include sidebar.html %>     
+
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <div id="content">
+          <% include navbar.html %> 
+
+           <div class="container-fluid">
+
+           <h1 class="h3 mb-2 text-gray-800">Roles</h1>
+          <p class="mb-4"></p>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <div class="btn-group" role="group" aria-label="...">
+                <a href="#" ng-click="newRole()" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>
+                &nbsp;
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table ng-table="tableParams" show-filter="true" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>Ruta</th>
+                      <th>Hora</th>
+                      <th>Numero de Vueltas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="rol in $data">
+                      <td><a href="#" ng-click="edit_role(route.nid)" role="button"><i class="fas fa-edit"></i></a></td>
+                      <td>{{rol.ruta}}</td>
+                      <td>{{rol.hour}}</td>
+                      <td>{{rol.rounds}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+    <div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: 600px">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            Rol
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="card shadow mb-4">
+              <div class="card-body">
+              <div class="table-responsive">
+              <form autocomplete="off">
+                <div class="row">
+                    <div class="col-md-5 mb-5">
+                      <label for="ruta">Ruta</label>
+                      <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required>
+                      <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="route in routeList" ng-click="fillTextbox(route)">{{route.name}}</li>
+                      </ul>
+                      <input type="hidden" class="form-control" id="route"  ng-model="role.route" >
+                      <input type="hidden" class="form-control" id="nid"  ng-model="role.nid" >
+                      <div class="invalid-feedback">
+                        El nombre es obligatorio
+                      </div>
+                    </div>
+                    <div class="col-md-5 mb-5">
+                      <label for="vueltas">Vueltas</label>
+                      <input type="number" style="width:100px" class="form-control" id="vueltas" ng-model="role.rounds" placeholder="">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 mb-5">
+                      <label for="vueltas">Hora</label>
+                      <input type="time" style="width:100px" class="form-control" id="hora" ng-model="role.hour" placeholder="">
+                    </div>
+                </div>
+              </form>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="#" ng-click="saveRole()" class="btn btn-primary" role="button" aria-pressed="true">Guardar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+             <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Tumsa 2020</span>
+          </div>
+        </div>
+      </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    
+   <% include scripts.html %>
+    <script src="/javascript/dashboard.js"></script>
+
+
+  </body>
+
+</html>
