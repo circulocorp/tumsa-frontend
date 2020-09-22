@@ -36,7 +36,11 @@ router.get('/profiles', function(req,res,next){
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    if("rows" in results){
+      res.status(200).json(results.rows);
+    }else{
+      res.status(200).json([]);
+    }
   });
 });
 
@@ -208,6 +212,7 @@ router.get('/routes', function(req, res, next){
       console.log(error);
     }
     data = [];
+    if("rows" in results){
     for(var i=0;i<results.rows.length;i++){
       var route = results.rows[i];
       if(route["points"] && route["points"]["places"]){
@@ -225,7 +230,8 @@ router.get('/routes', function(req, res, next){
         route["activo"] = "No";
       }
       data.push(route);
-    };
+    }
+    }
     res.status(200).json(data);
   });
 });
@@ -237,6 +243,7 @@ router.get('/routes/:nid', function(req, res, next){
       console.log(error);
     }
     data = [];
+    if("rows" in results){
     for(var i=0;i<results.rows.length;i++){
       var route = results.rows[i];
       if(route["points"] && route["points"]["places"]){
@@ -254,7 +261,8 @@ router.get('/routes/:nid', function(req, res, next){
         route["activo"] = "No";
       }
       data.push(route);
-    };
+    }
+   }
     res.status(200).json(data);
   });
 });
@@ -267,6 +275,7 @@ router.get('/routes/name/:name', function(req, res, next){
       console.log(error);
     }
     data = [];
+    if("rows" in results){
     for(var i=0;i<results.rows.length;i++){
       var route = results.rows[i];
       if(route["points"] && route["points"]["places"]){
@@ -284,7 +293,8 @@ router.get('/routes/name/:name', function(req, res, next){
         route["activo"] = "No";
       }
       data.push(route);
-    };
+    }
+   } 
     res.status(200).json(data);
   });
 });
@@ -292,7 +302,6 @@ router.get('/routes/name/:name', function(req, res, next){
 router.post('/routes', function(req,res,next){
   var data = req.body;
   var points = {"places": data.points};
-  console.log(points);
   var sql = "INSERT INTO routes (nid, name,created_by,created,status,time_rounds,points) values(uuid_generate_v4(),$1,NULL,NOW(),1,$2,$3)";
   pool.query(sql, [data.name,data.time_rounds,points],(error,results)=> {
     if(error){
@@ -332,7 +341,11 @@ router.get('/departures/:nid', function(req,res,next){
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    if("rows" in results){
+      res.status(200).json(results.rows);
+    }else{
+      res.status(200).json([]);
+    }
   });
 });
 
@@ -366,7 +379,11 @@ router.get('/roles', function(req,res,next){
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    if("rows" in results){
+      res.status(200).json(results.rows);
+    }else{
+      res.status(200).json([]);
+    }
   });
 });
 
@@ -376,7 +393,11 @@ router.get('/roles/:nid', function(req,res,next){
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    if("rows" in results){
+      res.status(200).json(results.rows);
+    }else{
+      res.status(200).json([]);
+    }
   });
 });
 
@@ -386,7 +407,11 @@ router.get('/roles/route/:route', function(req,res,next){
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    if("rows" in results){
+      res.status(200).json(results.rows);
+    }else{
+      res.status(200).json([]);
+    }
   });
 });
 
