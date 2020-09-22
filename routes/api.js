@@ -6,7 +6,7 @@ var router = express.Router();;
 
 var pg_host = process.env.PG_HOST || "localhost";
 var pg_user = process.env.PG_USER || "postgres";
-var pg_pass = secrets.get("tumsa_dbpass");
+var pg_pass = "admin1234"//secrets.get("tumsa_dbpass");
 var pg_db = process.env.PG_DB || "tumsadev";
 var API_URL = process.env.API_URL || "http://127.0.0.1:8888/api"
 
@@ -152,6 +152,20 @@ router.post('/downloadReport', function(req, res, next){
   });
 });
 
+router.post('/papeletas', function(req, res, next){
+  var data = req.body;
+  var url = API_URL+'/createtrips';
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token, "day":data.day, "camiones":data.camiones, "ruta":data.ruta},
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    res.send(body);
+  });
+
+});
+
 router.post('/uploadTrips', function(req, res, next){
   var data = req.files;
   console.log(data);
@@ -171,6 +185,16 @@ router.get('/downloadReport/:viaje', function(req, res, next){
     //res.setHeader('Content-Disposition', 'attachment; filename=reporte.pdf');
     //res.send(body);
   //});
+});
+
+router.get('/dailyReport', function(req,res, next){
+  var url = API_URL+'/dailyreport';
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token},
+      method: 'POST'
+  };
+  request(options).pipe(res);
 });
 
 

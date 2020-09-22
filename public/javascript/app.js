@@ -272,9 +272,20 @@ app.controller('PointsCtl', function ($scope, $http) {
 app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
   $scope.viaje = {};
   $scope.routes = [];
+  $scope.papeletas = {};
+  $scope.roles = [];
+  $scope.error = "";
+
   $scope.refreshRoutes = function(){
     $http.get('./api/routes').then(function(response){
       $scope.routes = response.data;    
+    });
+  }
+
+  $scope.refreshRoles = function(){
+    $http.get('./api/roles/route/'+$scope.papeletas.ruta).then(function(response){
+      $scope.roles = response.data;
+      console.log(response.data);
     });
   }
 
@@ -287,12 +298,34 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
   }
 
   $scope.showImport = function(){
+    $scope.error = "";
     $('#tripModal').modal('show');
   }
 
   $scope.uploadFile = function(files){
     $scope.file = new FormData();
     $scope.file.append("file", files[0]);
+  }
+
+  $scope.validate = function(){
+    var errors = 0;
+    console.log($scope.papeletas)
+    if($scope.papeletas.camiones == null || $scope.papeletas.camiones.split(',').length != $scope.roles.length){
+      $scope.error = "El numero de camiones no coincide con el numero de roles"
+      errors++;
+    }
+    return errors;
+  }
+
+  $scope.crearPapeletas = function(){
+    var papeletas = $scope.papeletas;
+    valid = $scope.validate();
+    if(valid == 0){
+      $http.post('./api/papeletas', papeletas).then(function(response){
+        $scope.refreshViajes();
+        $('#tripModal').modal('hide');
+      });
+    }
   }
 
   $scope.submitFile = function(){
@@ -318,6 +351,7 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
       var file = new Blob([data], {
         type: 'application/csv'
       });
+      console.log(file);
       var fileURL = URL.createObjectURL(file);
       var a = document.createElement('a');
       a.href = fileURL;
@@ -330,6 +364,33 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
   }
 
   $scope.refreshViajes();
+});
+
+
+app.controller('ReportsCtl', function($scope, $http){
+
+  $scope.daily = function(){
+    $http({
+      url: './api/dailyReport',
+      method: 'POST',
+      headers: {
+        'Content-type': 'text/html',
+      }
+    }).then(function(data,status,headers,config){
+      var file = new Blob([data], {
+        type: 'application/csv'
+      });
+      console.log(file);
+      var fileURL = URL.createObjectURL(file);
+      var a = document.createElement('a');
+      a.href = fileURL;
+      a.target = '_blank';
+      a.download = 'yourfilename.html';
+      document.body.appendChild(a); //create the link "a"
+      a.click(); //click the link "a"
+      document.body.removeChild(a); //remove the link "a"
+    });
+  }
 });
 
 app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
