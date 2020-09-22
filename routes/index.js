@@ -122,9 +122,10 @@ router.post('/login', (req, res) => {
       method: 'POST',
       form: req.body
   };
+  console.log(url);
   request(options, (err, re, body) => {
+     console.log(body);
     if("username" in body){
-       console.log(body);
       req.session.user = body;
     }else{
       req.session.error = "Acceso Denegado";
