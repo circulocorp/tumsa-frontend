@@ -114,7 +114,7 @@ router.get('/vehicles', sessionChecker, (req, res) =>{
 });
 
 
-router.post('./login', (req, res) => {
+router.post('/login', (req, res) => {
   var url = API_URL+'/login';
   var options = {
       uri: url,
@@ -129,7 +129,7 @@ router.post('./login', (req, res) => {
     }else{
       req.session.error = "Acceso Denegado";
     }
-    res.redirect('./');
+    res.redirect('/');
   });
 });
 
