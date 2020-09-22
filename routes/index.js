@@ -5,7 +5,7 @@ var secrets = require('docker-secrets-nodejs');
 
 var pg_host = process.env.PG_HOST || "localhost";
 var pg_user = process.env.PG_USER || "postgres";
-var pg_pass = secrets.get("tumsa_pass");
+var pg_pass = secrets.get("tumsa_dbpass");
 var pg_db = process.env.PG_DB || "tumsadev";
 var API_URL = process.env.API_URL || "http://127.0.0.1:8888/api"
 
