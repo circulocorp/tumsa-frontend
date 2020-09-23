@@ -20,8 +20,8 @@ const pool = new Pool({
 
 
 var sessionChecker = (req, res, next) => {
-  // if (req.session && req.session.user) {
-      req.session.user = {
+  if (req.session && req.session.user) {
+      /*req.session.user = {
           description: 'API TUMSA',
           firstName: 'API',
           id: '53a90630-9897-4cd5-922b-3556ab293e39',
@@ -45,11 +45,11 @@ var sessionChecker = (req, res, next) => {
           utcLastModified: '2020-08-22T15:25:34.693Z',
           utcOffset: -360,
           utcTermsAndConditionsAcceptDate: '2020-08-23T14:56:17.69Z'
-          } 
+          } */
          next();
-  /*} else {
+  } else {
       res.render('login');
-  }*/
+  }
 };
 
 router.get('/', sessionChecker, (req,res) => {
