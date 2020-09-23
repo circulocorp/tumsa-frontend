@@ -60,6 +60,7 @@ function formatTime(date){
   return hours+":"+mins+":"+secs;
 }
 
+
 var app = angular.module('tumsa', ["ngTable","angularjs-datetime-picker", "ui.bootstrap"]);
 var map_token = 'pk.eyJ1IjoibWF1YmFycmVyYSIsImEiOiJjajhvdnVjeDQwN3k2MndwMXZkNzBoeW01In0.MFXZsAk84rNXSAmodkAGdg';
 
@@ -430,6 +431,14 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
     }
   }
 
+  $scope.calc_route2 = function(){
+    var data = {"viaje": $scope.viaje, "role": $scope.role};
+    $http.post('./api/calc_trip', data).then(function(response){
+        $scope.total_time = response.data["total_time"];
+        $scope.calcs = response.data["trip"];
+    });
+  }
+
   $scope.calc_route = function(){
     $scope.calcs = [];
     $scope.total_time = 0;
@@ -488,11 +497,11 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
     var time = role["hour"].split(":");
     start_date.setHours(parseInt(time[0]), parseInt(time[1]), parseInt(time[2]));
     $scope.viaje.start_date = start_date;
-    $scope.calc_route();
+    $scope.calc_route2();
   }
 
   $scope.complete2 = function(search){
-    if(search  && search.length > 2){
+    if(search  && search.length > 1){
       $http.get('./api/vehicles/search/'+search).then(function(response){
           vehicles =  response.data;
           var output=[];
@@ -617,7 +626,6 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
       $scope.role.route = route.nid;
       $scope.routeList=null;
       $scope.ruta = route.name;
-      console.log($scope.role);
   }
 
 
@@ -625,6 +633,15 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
     $http.get('./api/roles').then(function(response){
       $scope.tableParams = new NgTableParams({filter:{}}, { dataset: response.data });
     });
+  }
+
+  $scope.edit_role = function(role){
+    $scope.role["nid"] = role["nid"];
+    $scope.role["rounds"] = parseInt(role["rounds"]);
+    $scope.role["route"] = role["route"];
+    $scope.ruta = role["ruta"];
+    $scope.role["hour"] = new Date("1970-04-04 "+role["hour"]);
+    $('#roleModal').modal('show');
   }
 
   $scope.newRole  = function(){

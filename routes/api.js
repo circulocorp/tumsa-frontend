@@ -201,6 +201,19 @@ router.get('/dailyReport', function(req,res, next){
   request(options).pipe(res);
 });
 
+router.post('/calc_trip', function(req, res, next){
+  var url = API_URL+'/calc_trip';
+  var data = req.body;
+  var options = {
+      uri: url,
+      json: {"viaje": data.viaje, "role": data.role},
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    res.send(body);
+  });
+});
+
 
 
 
@@ -429,7 +442,7 @@ router.post('/roles', function(req,res,next){
 
 router.patch('/roles/:id', function(req, res, next){
   var data = req.body;
-  var sql = "update roles set hour=$2,rounds=$3,route=$4 where id=$1";
+  var sql = "update roles set hour=$2,rounds=$3,route=$4 where nid=$1";
   pool.query(sql, [req.params.id,data.hour,data.rounds,data.route],(error,results)=> {
     if(error){
       console.log(error);
