@@ -369,6 +369,8 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
 
 app.controller('ReportsCtl', function($scope, $http){
 
+  $scope.report2 = {};
+
   $scope.daily = function(){
     $http({
       url: './api/dailyReport',
