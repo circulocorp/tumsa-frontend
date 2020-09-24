@@ -38,7 +38,7 @@
                   <thead>
                     <tr>
                       <th>&nbsp;</th>
-                      <th>Unidad</th>
+                      <th>Econ&otilde;mico</th>
                       <th>Tiempo</th>
                       <th>Inicio</th>
                       <th>Fin</th>
@@ -49,10 +49,10 @@
                       <td><a href="./api/downloadReport/{{departure.nid}}" target="_blank" role="button"><i class="fas fa-file-pdf" title="Descargar Reporte"></i></a>&nbsp;
                         <a href="#" role="button"><i class="fas fa-clone" title="Crear similar"></i></a>
                       </td>
-                      <td>{{departure.vehicle.registration}}</td>
+                      <td>{{departure.vehicle.description}}</td>
                       <td>{{departure.total_time}}&nbsp;mins.</td>
-                      <td>{{departure.start_date | date:'medium' }}</td>
-                      <td>{{departure.end_date | date:'medium' }}</td>
+                      <td>{{departure.start_date | date:'short' }}</td>
+                      <td>{{departure.end_date | date:'short' }}</td>
                     </tr>
                   </tbody>
                 </table>

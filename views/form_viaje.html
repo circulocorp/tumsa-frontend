@@ -106,7 +106,7 @@
                   <tbody>
                     <tr ng-repeat="calc in calcs">
                       <td>{{calc.description}}</td>
-                      <td>{{calc.hour}}</td>
+                      <td>{{calc.hour | date:'shortTime' }}</td>
                       <td>{{calc.round}}</td>
                     </tr>
                   </tbody>

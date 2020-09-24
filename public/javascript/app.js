@@ -433,13 +433,16 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
 
   $scope.calc_route2 = function(){
     var data = {"viaje": $scope.viaje, "role": $scope.role};
+    var calcs = [];
     $http.post('./api/calc_trip', data).then(function(response){
         $scope.total_time = response.data["total_time"];
         $scope.calcs = response.data["trip"];
     });
   }
 
+  //Deprecated
   $scope.calc_route = function(){
+    /*
     $scope.calcs = [];
     $scope.total_time = 0;
     if($scope.viaje.route == null){
@@ -487,7 +490,7 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
         time += parseInt(route.time_rounds);
       }
       $scope.total_time = time;
-    }
+      */
   }
 
   $scope.selectRole = function(){
