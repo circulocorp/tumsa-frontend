@@ -159,7 +159,7 @@ app.controller('UsuariosCtl', function ($scope, $http, NgTableParams) {
   $scope.refreshUsers();
 });
 
-app.controller('VehiclesCtl', function($scope, $http){
+app.controller('VehiclesCtl', function($scope, $http, NgTableParams){
   $scope.vehicles = [];
   $scope.vehicle = {};
 
@@ -205,6 +205,7 @@ app.controller('VehiclesCtl', function($scope, $http){
         }
         $scope.vehicles.push(camiones[i]);
       }
+      $scope.tableParams = new NgTableParams({filter:{}}, { dataset: camiones });
     });
   }
   $scope.refreshVehicles();
@@ -276,6 +277,8 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
   $scope.papeletas = {};
   $scope.roles = [];
   $scope.error = "";
+  $scope.customFilter = "";
+  $scope.tableParams = new NgTableParams({}, {});
 
   $scope.refreshRoutes = function(){
     $http.get('./api/routes').then(function(response){
@@ -294,12 +297,18 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
 
   $scope.refreshViajes = function(){
     $http.get('./api/departures').then(function(response){
-      $scope.tableParams = new NgTableParams({filter:{}}, { dataset: response.data });
+      $scope.tableParams = new NgTableParams({},{ dataset: response.data });
     });
   }
 
+  //custom filter
+  $scope.$watch('customFilter', function(newTerm,oldTerm){
+    $scope.tableParams.filter({ruta: $scope.customFilter});
+  })
+
   $scope.showImport = function(){
     $scope.error = "";
+    $scope.papeletas = {};
     $('#tripModal').modal('show');
   }
 
@@ -500,6 +509,9 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
     var time = role["hour"].split(":");
     start_date.setHours(parseInt(time[0]), parseInt(time[1]), parseInt(time[2]));
     $scope.viaje.start_date = start_date;
+    $scope.viaje.comments = role.comments;
+    $scope.viaje.start_point = role.start_point;
+    $scope.viaje.end_point = role.end_point;
     $scope.calc_route2();
   }
 
@@ -566,7 +578,8 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
     viaje["vehicle"] = $scope.viaje["vehicle"];
     viaje["total_time"] = $scope.total_time;
     viaje["start_point"] = $scope.viaje.start_point;
-    viaje["end_point"] = $scope.end_point;
+    viaje["end_point"] = $scope.viaje.end_point;
+    viaje["comments"] = $scope.viaje.comments;
 
     if($scope.viaje.nid == null || $scope.viaje.nid == ""){
     $http.post('./api/departures', viaje).then(function(response){
@@ -607,6 +620,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
   $scope.ruta = "";
   $scope.role = {};
   $scope.routeList=[];
+  $scope.places = [];
 
   $scope.complete = function(search){
     if(search  && search.length > 2){
@@ -629,6 +643,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
       $scope.role.route = route.nid;
       $scope.routeList=null;
       $scope.ruta = route.name;
+      $scope.places = route.points.places;
   }
 
 
@@ -639,17 +654,27 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
   }
 
   $scope.edit_role = function(role){
+    console.log(role);
     $scope.role["nid"] = role["nid"];
     $scope.role["rounds"] = parseInt(role["rounds"]);
     $scope.role["route"] = role["route"];
+    $scope.role["comments"] = role["comments"];
     $scope.ruta = role["ruta"];
     $scope.role["hour"] = new Date("1970-04-04 "+role["hour"]);
+
+    $http.get('./api/routes/'+role["route"]).then(function(response){
+      $scope.places = response.data[0]["points"]["places"];
+      $scope.role["start_point"] = role["start_point"]
+      $scope.role["end_point"] = role["end_point"]
+    });
+    
     $('#roleModal').modal('show');
   }
 
   $scope.newRole  = function(){
     $scope.role = {}
     $scope.ruta = "";
+    $scope.places = [];
     $('#roleModal').modal('show');
   }
 

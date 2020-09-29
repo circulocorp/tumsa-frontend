@@ -33,7 +33,8 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-hover" width="100%" cellspacing="0">
+                <table ng-table="tableParams" class="table table-bordered" id="dataTable" width="100%" cellspacing="0" show-filter="false">
+                  <!--
                   <thead>
                     <tr>
                       <th>&nbsp;#</th>
@@ -43,13 +44,14 @@
                       <th>Ultimo Reporte</th>
                     </tr>
                   </thead>
+                -->
                   <tbody id="dataset">
-                    <tr ng-repeat="vehicle in vehicles">
+                    <tr ng-repeat="vehicle in $data">
                       <td><button ng-click="map(vehicle)" class="btn"><i class="fas fa-map-marked-alt"></i></button></td>
-                      <td>{{vehicle.unit_Description}}</td>
-                      <td>{{vehicle.description}}</td>
-                      <td>{{vehicle.registration}}</td>
-                      <td><span class="badge badge-pill badge-{{vehicle.lastReportColor}}">{{vehicle.lastReport | date:'medium' }}</span></td>
+                      <td data-title="'Economico'" sortable="'description'" filter="{description: 'text'}">{{vehicle.description}}</td>
+                      <td data-title="'Unidad'" sortable="'unit_Description'" filter="{unit_Description: 'text'}">{{vehicle.unit_Description}}</td>
+                      <td data-title="'Placas'" sortable="'name'" filter="{registration: 'text'}">{{vehicle.registration}}</td>
+                      <td data-title="'Ultimo Reporte'" sortable="'name'" filter="{lastReport: 'text'}"><span class="badge badge-pill badge-{{vehicle.lastReportColor}}">{{vehicle.lastReport | date:'medium' }}</span></td>
                     </tr>
                   </tbody>
                 </table>

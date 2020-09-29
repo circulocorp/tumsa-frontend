@@ -82,16 +82,23 @@
                 <label for="firstName">Fecha Estimada Fin</label>
                 <input datetime-picker class="form-control" ng-model="viaje.end_date" date-format="yyyy-MM-dd HH:mm:ss" ng-click="change()"/>
               </div>
-
-              <div class="col-md-3 mb-3">
-                <a href="#" class="btn btn-primary" role="button" ng-click="calc_route2()" aria-pressed="true">Calcular</a>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-6">
+                <label for="firstName">Comentarios</label>
+                <textarea class="form-control" ng-model="viaje.comments">{{viaje.comments}}</textarea>
               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-3 mb-3">                
+               </div>
             </div>
              <div class="row">
               <div class="col-md-9 mb-9">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    Viaje Calculado
+                    Viaje Calculado &nbsp;
+                    <a href="#" class="btn btn-primary" role="button" ng-click="calc_route2()" aria-pressed="true">Calcular</a>
                   </div>
                 <div class="card-body">
               <div class="table-responsive">

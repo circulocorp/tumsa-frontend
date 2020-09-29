@@ -29,12 +29,15 @@
               <div class="btn-group" role="group" aria-label="...">
                 <a href="./form_ruta" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>
                 &nbsp;
+                <!--
                 <a href="#" class="btn btn-primary" role="button" aria-pressed="true">Importar</a>
+                -->
               </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table ng-table="tableParams" show-filter="true" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table ng-table="tableParams" class="table table-bordered" id="dataTable" width="100%" cellspacing="0" show-filter="false">
+                  <!--
                   <thead>
                     <tr>
                       <th>&nbsp;</th>
@@ -44,13 +47,13 @@
                       <th>Activo</th>
                     </tr>
                   </thead>
+                -->
                   <tbody>
                     <tr ng-repeat="route in $data">
                       <td><a href="./form_ruta?id={{route.nid}}" role="button"><i class="fas fa-route"></i></a></td>
-                      <td>{{route.name}}</td>
-                      <td>{{route.total_time}} minutos</td>
-                      <td>{{route.created}}</td>
-                      <td>{{route.activo}}</td>
+                      <td data-title="'Nombre'" sortable="'name'" filter="{name: 'text'}">{{route.name}}</td>
+                      <td data-title="'Tiempo Total'" sortable="'total_time'" filter="{total_time: 'text'}">{{route.total_time}} minutos</td>
+                      <td data-title="'Fecha Creado'" sortable="'created'" filter="{created: 'text'}">{{route.created}}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -26,33 +26,47 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
+              <div class="row">
+                <div class="col-md-3">
               <div class="btn-group" role="group" aria-label="...">
                 <a href="/form_viaje" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>
                 &nbsp;
                 <a href="#" ng-click="showImport()" class="btn btn-primary" role="button" aria-pressed="true">Subir en Volumen</a>
               </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-field second">
+                  <input type="search" ng-model="customFilter" placeholder="Ruta" />
+                </div>
+              </div>
+
+              </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table ng-table="tableParams" show-filter="true" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table ng-table="tableParams" class="table table-bordered table-condensed" id="dataTable" width="100%" cellspacing="0" show-filter="false">
+                  <!--
                   <thead>
                     <tr>
                       <th>&nbsp;</th>
-                      <th>Econ&otilde;mico</th>
+                      <th>Ruta</th>
+                      <th>Econ&oacute;mico</th>
                       <th>Tiempo</th>
                       <th>Inicio</th>
                       <th>Fin</th>
                     </tr>
                   </thead>
+                -->
                   <tbody>
                     <tr ng-repeat="departure in $data">
                       <td><a href="./api/downloadReport/{{departure.nid}}" target="_blank" role="button"><i class="fas fa-file-pdf" title="Descargar Reporte"></i></a>&nbsp;
                         <a href="#" role="button"><i class="fas fa-clone" title="Crear similar"></i></a>
                       </td>
-                      <td>{{departure.vehicle.description}}</td>
-                      <td>{{departure.total_time}}&nbsp;mins.</td>
-                      <td>{{departure.start_date | date:'short' }}</td>
-                      <td>{{departure.end_date | date:'short' }}</td>
+                      <td data-title="'Ruta'" sortable="'ruta'" filter="{ruta: 'text'}">{{departure.ruta}}</td>
+                      <td data-title="'Economico'" sortable="'eco'" filter="{eco: 'text'}">{{departure.eco}}</td>
+                      <td data-title="'Tiempo Total (mins.)'" sortable="'total_time'" filter="{total_time: 'text'}">{{departure.total_time}}&nbsp;mins.</td>
+                      <td data-title="'Inicio'" sortable="'start_date'" filter="{start_date: 'text'}">{{departure.start_date | date:'short' }}</td>
+                      <td data-title="'Fin'" sortable="'end_date'" filter="{end_date: 'text'}">{{departure.end_date | date:'short' }}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -72,7 +72,7 @@
               <div class="table-responsive">
               <form autocomplete="off">
                 <div class="row">
-                    <div class="col-md-5 mb-5">
+                    <div class="col-md-4 mb-4">
                       <label for="ruta">Ruta</label>
                       <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required>
                       <ul class="list-group">
@@ -84,16 +84,34 @@
                         El nombre es obligatorio
                       </div>
                     </div>
-                    <div class="col-md-5 mb-5">
+                    <div class="col-md-4 mb-4">
                       <label for="vueltas">Vueltas</label>
                       <input type="number" style="width:100px" class="form-control" id="vueltas" ng-model="role.rounds" placeholder="">
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <label for="vueltas">Hora</label>
+                      <input type="time" style="width:100px" class="form-control" id="hora" ng-model="role.hour" placeholder="">
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-5 mb-5">
-                      <label for="vueltas">Hora</label>
-                      <input type="time" style="width:100px" class="form-control" id="hora" ng-model="role.hour" placeholder="">
+                      <label for="vueltas">Punto Inicial</label>
+                      <select id="rol" ng-model="role.start_point" class="form-control" style="width:150px">
+                        <option value="{{place.id}}" ng-repeat="place in places">{{place.description}}</option>
+                      </select>
                     </div>
+                    <div class="col-md-5 mb-5">
+                      <label for="vueltas">Punto Final</label>
+                      <select id="rol" ng-model="role.end_point" class="form-control" style="width:150px">
+                        <option value="{{place.id}}" ng-repeat="place in places">{{place.description}}</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-9 mb-9">
+                    <label for="comentarios">Comentarios</label>
+                    <textarea class="form-control" ng-model="role.comments">{{role.comments}}</textarea>
+                  </div>
                 </div>
               </form>
               </div>

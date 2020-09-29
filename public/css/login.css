@@ -9,6 +9,10 @@ body {
     height: 37px;
   }
 
+.logo2 {
+  height: 100px
+}
+
 .login-card {
   border: 0;
   border-radius: 27.5px;

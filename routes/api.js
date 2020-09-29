@@ -30,6 +30,25 @@ router.get('/getsession', function(req, res, next) {
   res.status(200).json(req.session.user);
 });
 
+function sessionChecker(req) {
+  if (req.session && req.session.user) {
+    /*
+    var url = API_URL+'/validatetoken' 
+    var options = {
+        uri: url,
+        json: true,
+        form: req.session.user.token,
+        method: 'POST'
+    };
+    request(options, (err, re, body) => {
+      res.send(body);
+    });*/
+    return true;
+  }else{
+    return false;
+  }
+}
+
 router.get('/profiles', function(req,res,next){
   var sql = "SELECT * FROM profiles";
   pool.query(sql, (error, results) => {
@@ -44,53 +63,6 @@ router.get('/profiles', function(req,res,next){
   });
 });
 
-/*
-router.get('/users', function(req,res, next){ 
-	var sql = "SELECT us.*,pro.name as perfil FROM users us,profiles pro where pro.nid = us.profile";
-	pool.query(sql, (error, results) => {
-    if (error) {
-      console.log(error);
-    }
-    res.status(200).json(results.rows);
-	});
-});
-
-router.get('/users/:nid', function(req,res, next){ 
-  var data = req.body;
-	var sql = "SELECT password,name,profile,blocked FROM users where nid=$1";
-	pool.query(sql, [data.nid],(error, results) => {
-    if (error) {
-      console.log(error);
-    }
-    res.status(200).json(results);
-	});
-});
-
-router.post('/users', function(req, res, next){ 
-  var data = req.body;
-  var sql = 'INSERT INTO users (nid,username, password, name, email, profile, blocked, created, updated) \
-        values(uuid_generate_v4(),$1,$2,$3,$1,$4,0,NOW(),NOW()) RETURNING nid';
-  pool.query(sql, [data.username, data.password, data.name, data.profile], 
-    (error, results) => {
-    if (error) {
-          console.log(error);
-      }
-      res.status(200).json({"status": "ok"});
-  });
-});
-
-router.patch('/users/:nid', function(req, res, next){  
-  var data = req.body;
-  var sql = 'UPDATE users set password=$2,name=$3,profile=$4,blocked=$5,updated=NOW() where nid=$1';
-  pool.query(sql, [req.params.nid,data.password,data.name,data.profile,data.blocked], 
-    (error, results) => {
-    if (error) {
-          console.log(error);
-      }
-      res.status(200).json({"status": "ok"});
-  });
-});
-*/
 router.get('/points', function(req, res, next){
   var url = API_URL+'/places' 
   var options = {
@@ -105,6 +77,7 @@ router.get('/points', function(req, res, next){
 });
 
 router.get('/vehicles', function(req,res,next){
+  if(sessionChecker(req)){
   var url = API_URL+'/allvehicles' 
   var options = {
       uri: url,
@@ -114,6 +87,9 @@ router.get('/vehicles', function(req,res,next){
   request(options, (err, re, body) => {
     res.send(body);
   });
+ }else{
+  res.send({"error": "Token Error"});
+ }
 });
 
 router.get('/vehicles/position/:vehicle', function(req,res,next){
@@ -176,6 +152,7 @@ router.post('/uploadTrips', function(req, res, next){
 });
 
 router.get('/downloadReport/:viaje', function(req, res, next){
+  if(sessionChecker(req)){
   var viaje = req.params.viaje;
   var url = API_URL+'/tripreport';
   var options = {
@@ -183,12 +160,8 @@ router.get('/downloadReport/:viaje', function(req, res, next){
       json: {"token": req.session.user.token, "viaje":viaje},
       method: 'POST'
   };
-  request(options).pipe(res);
-    //res.setHeader('Content-Length', body);
-    //res.setHeader('Content-Type', 'application/pdf');
-    //res.setHeader('Content-Disposition', 'attachment; filename=reporte.pdf');
-    //res.send(body);
-  //});
+   request(options).pipe(res);
+  }
 });
 
 router.get('/dailyReport', function(req,res, next){
@@ -219,7 +192,7 @@ router.post('/calc_trip', function(req, res, next){
 
 
 router.get('/routes', function(req, res, next){
-  var sql = "SELECT * FROM routes";
+  var sql = "SELECT * FROM routes order by name asc";
   pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
@@ -344,12 +317,19 @@ router.get('/departures', function(req,res,next){
     if (error) {
       console.log(error);
     }
-    res.status(200).json(results.rows);
+    var data = [];
+    for(var i=0;i<results.rows.length;i++){
+      d = results.rows[i];
+      d["ruta"] = d["route"]["name"];
+      d["eco"] = d["vehicle"]["description"];
+      data.push(d);
+    }
+    res.status(200).json(data);
   });
 });
 
 router.get('/departures/:nid', function(req,res,next){
-  var sql = "SELECT * FROM departures where nid=$1 order by created desc";
+  var sql = "SELECT * FROM departures where nid=$1 order by created desc LIMIT 100";
   pool.query(sql, [req.params.nid],(error, results) => {
     if (error) {
       console.log(error);
@@ -366,8 +346,8 @@ router.post('/departures', function(req,res,next){
   var data = req.body;
   start_date = new Date(data.start_date);
   start_date.setHours(start_date.getHours(), start_date.getMinutes(), start_date.getSeconds(),0);
-  var sql = "INSERT INTO departures(nid,trip,vehicle,created,start_date,end_date,rounds,start_point,end_point,total_time,route) values(uuid_generate_v4(),$1,$2,NOW(),$3,$4,$5,$6,$7,$8,$9)";
-  pool.query(sql, [data.trip,data.vehicle,start_date,data.end_date,data.rounds,data.start_point,data.end_point,data.total_time,data.route],(error,results)=> {
+  var sql = "INSERT INTO departures(nid,trip,vehicle,created,start_date,end_date,rounds,start_point,end_point,total_time,route,comments) values(uuid_generate_v4(),$1,$2,NOW(),$3,$4,$5,$6,$7,$8,$9,$10)";
+  pool.query(sql, [data.trip,data.vehicle,start_date,data.end_date,data.rounds,data.start_point,data.end_point,data.total_time,data.route,data.comments],(error,results)=> {
     if(error){
       console.log(error);
     }
@@ -430,9 +410,9 @@ router.get('/roles/route/:route', function(req,res,next){
 
 router.post('/roles', function(req,res,next){
   var data = req.body;
-  var sql = "INSERT INTO roles(nid,hour,rounds,route) \
-            values(uuid_generate_v4(),$1,$2,$3)";
-  pool.query(sql, [data.hour, data.rounds, data.route],(error,results)=> {
+  var sql = "INSERT INTO roles(nid,hour,rounds,route,start_point,end_point,comments) \
+            values(uuid_generate_v4(),$1,$2,$3,$4,$5,$6)";
+  pool.query(sql, [data.hour, data.rounds, data.route,data.start_point,data.end_point,data.comments],(error,results)=> {
     if(error){
       console.log(error);
     }
@@ -442,8 +422,9 @@ router.post('/roles', function(req,res,next){
 
 router.patch('/roles/:id', function(req, res, next){
   var data = req.body;
-  var sql = "update roles set hour=$2,rounds=$3,route=$4 where nid=$1";
-  pool.query(sql, [req.params.id,data.hour,data.rounds,data.route],(error,results)=> {
+  console.log(data);
+  var sql = "update roles set hour=$2,rounds=$3,route=$4,start_point=$5,end_point=$6,comments=$7 where nid=$1";
+  pool.query(sql, [req.params.id,data.hour,data.rounds,data.route,data.start_point,data.end_point,data.comments],(error,results)=> {
     if(error){
       console.log(error);
     }
