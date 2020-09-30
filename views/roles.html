@@ -26,28 +26,50 @@
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <div class="btn-group" role="group" aria-label="...">
+                      <a href="#" ng-click="newRole()" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>&nbsp;
+                  </div>
+                </div>
+                <form class="form-inline my-6 my-lg-0">
+                    <input ng-model="customFilter" class="form-control mr-sm-2" type="search" placeholder="Filtrar" aria-label="Search">
+                    <button ng-click="filter()" class="btn btn-outline-success my-2 my-sm-0" type="submit">{{filterTxt}}</button>
+                  </form>
+              </nav>
+              <!--
+              <div class="row">
+                <div class="col-md-10">
               <div class="btn-group" role="group" aria-label="...">
-                <a href="#" ng-click="newRole()" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>
-                &nbsp;
+                <a href="#" ng-click="newRole()" class="btn btn-primary" role="button" aria-pressed="true">Crear</a>&nbsp;
               </div>
+              </div>
+              <div class="col-md-2">
+                <div class="dropdown float-sm-right">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+                  <i class="fas fa-filter"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <form autocomplete="off">
+                    <input type="search" ng-model="customFilter" placeholder="Ruta" />
+                  </form>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Clear Filter</a>
+                </div>
+                </div>
+              </div>
+             </div>
+           -->
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table ng-table="tableParams" show-filter="true" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>&nbsp;</th>
-                      <th>Ruta</th>
-                      <th>Hora</th>
-                      <th>Numero de Vueltas</th>
-                    </tr>
-                  </thead>
+                <table ng-table="tableParams" class="table table-bordered" id="dataTable" width="100%" cellspacing="0" show-filter="false">
                   <tbody>
                     <tr ng-repeat="rol in $data">
                       <td><a href="#" ng-click="edit_role(rol)" role="button"><i class="fas fa-edit"></i></a></td>
-                      <td>{{rol.ruta}}</td>
-                      <td>{{rol.hour}}</td>
-                      <td>{{rol.rounds}}</td>
+                      <td data-title="'Ruta'" sortable="'ruta'" filter="{ruta: 'text'}">{{rol.ruta}}</td>
+                      <td data-title="'Horario'" sortable="'hour'" filter="{hour: 'text'}">{{rol.hour}}</td>
+                      <td data-title="'Vueltas'" sortable="'rounds'" filter="{rounds: 'text'}">{{rol.rounds}}</td>
                     </tr>
                   </tbody>
                 </table>

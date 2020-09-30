@@ -318,11 +318,13 @@ router.get('/departures', function(req,res,next){
       console.log(error);
     }
     var data = [];
+    if("rows" in results){
     for(var i=0;i<results.rows.length;i++){
       d = results.rows[i];
       d["ruta"] = d["route"]["name"];
       d["eco"] = d["vehicle"]["description"];
       data.push(d);
+    }
     }
     res.status(200).json(data);
   });

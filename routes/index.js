@@ -21,7 +21,7 @@ const pool = new Pool({
 
 var sessionChecker = (req, res, next) => {
   if (req.session && req.session.user) {
-      /*req.session.user = {
+     /* req.session.user = {
           description: 'API TUMSA',
           firstName: 'API',
           id: '53a90630-9897-4cd5-922b-3556ab293e39',
@@ -30,7 +30,7 @@ var sessionChecker = (req, res, next) => {
           surname: 'TUMSA',
           timeZoneId: 11,
           token: {
-            access_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IkVGMUUxMkVFOTQ1NTdBNDg5MzlCMUJBNjJFQUUxQzFBN0ZDNTY2MkQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI3eDRTN3BSVmVraVRteHVtTHE0Y0duX0ZaaTAifQ.eyJuYmYiOjE2MDEzMzQzMDYsImV4cCI6MTYwMTMzNzkwNiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQvcmVzb3VyY2VzIiwibXo2LWFwaSJdLCJjbGllbnRfaWQiOiJtei1hM3RlayIsInN1YiI6IjUzYTkwNjMwLTk4OTctNGNkNS05MjJiLTM1NTZhYjI5M2UzOSIsImF1dGhfdGltZSI6MTYwMTMzNDMwNiwiaWRwIjoibG9jYWwiLCJtel91c2VybmFtZSI6IlRVTVNBLUFQSSIsIm16X3VzZXJncm91cF9pZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsIm16X3NoYXJkX2NvZGUiOiJBM1RFSyIsInNjb3BlIjpbIm16X3VzZXJuYW1lIiwib3BlbmlkIiwibXo2LWFwaS5hbGwiXSwiYW1yIjpbInB3ZCJdfQ.zcv1Dgh_eVFAgQpASQtxbCfVKtIehFN_SxBp2plYFs4Fy21K5VBsWqJLMGMNnaCSrw1W1tBMayvzws0iqyOnAgRJHTwDYuXE9shghCTcj-hI66wgbpoIY4HJHh0mi1QO0_HMVb5jssC2n22LSWDznmxna11dooi80g46jYIaauY1nnkZLpOC_WvwV0fYDTauv8jmQOw_tCQywiz2ifQHtA3efog-rR0MvHFOzxYYnaELSup0fwhpAPjwFnAY5rBWMh3p-_MJI9EchX8vUveT6R_sLYYo67Q5rxMZfvsVNDN7Chj_EyzCTMc1QF0UuN_7V-JluYx84xAWZNkyW_THth_PVV_KpLVh16eGK8fSh-ytDfBg2eYe5qWSspaqqp5c-UyKpSYhlXnIVRCaWWryZzQK5kiqCoITgeumm7rWjphpilgnC_k9pj6NMGEApQjn9oPaUpc_fnI8DhvVll_KPjbBGurQlF935d1IPu4VxebBrZmIKnDymjGTeCCGSfJxJ4H7RXlOZLu9xoihm1Tx1yJejrKJceZHXt86ZDtgIcH_6yLg3LCPrFbi5bYPliV7V3ChTEh8oCEQpKIVuyPupYEq105_FHkyJYyNhEphG9zhWrPZLcVkwd9In-8s3OBHUT8BOLIqese_ymwa7mOcvh8JdGAlE_Wltqkz8AHR-lk',
+            access_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IkVGMUUxMkVFOTQ1NTdBNDg5MzlCMUJBNjJFQUUxQzFBN0ZDNTY2MkQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI3eDRTN3BSVmVraVRteHVtTHE0Y0duX0ZaaTAifQ.eyJuYmYiOjE2MDEzNDU2NDUsImV4cCI6MTYwMTM0OTI0NSwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQvcmVzb3VyY2VzIiwibXo2LWFwaSJdLCJjbGllbnRfaWQiOiJtei1hM3RlayIsInN1YiI6IjUzYTkwNjMwLTk4OTctNGNkNS05MjJiLTM1NTZhYjI5M2UzOSIsImF1dGhfdGltZSI6MTYwMTM0NTY0NSwiaWRwIjoibG9jYWwiLCJtel91c2VybmFtZSI6IlRVTVNBLUFQSSIsIm16X3VzZXJncm91cF9pZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsIm16X3NoYXJkX2NvZGUiOiJBM1RFSyIsInNjb3BlIjpbIm16X3VzZXJuYW1lIiwib3BlbmlkIiwibXo2LWFwaS5hbGwiXSwiYW1yIjpbInB3ZCJdfQ.rqMNmsRKzyspSadyKnJYdhnIsk7uE1yGns0kU-61MPfmAcQQ70lRsMiBg2jnDZALhTJ1AAjDRT3gFxEzwPvf09uAjq-I2hHBewQ7FKRSYKiErZcRDJZTQSrNnjXJWOJRPWoViFtUKG4KMFszOaK02vxGytyC533kofli1vIZCvfYBFbZB08JDUsWAMeC_arwXwgt7lKypsjlwZFfyzVeiuOHjSufYr_rZyZhZQ6PwvjV2xaxD6WVrKGLFMqYjTa2swNu3AXElrAoGBhQ7WG_eNrUZ6vPStPixJTWrOM19wUzGz5KUqVyc8lRl82sQk63etLtS38r2KfUeG7s9_5sy1fFDRusO5CvJ3pbMsHgXi_2IfPUaXTzl2-PJflBfpUQBWsd_vux-lYkODlhdStsmAS2WjHFlIAIam4b3PB3bpTAFJjn24oh3MW4o23bciKSig2yITKjBhGeZ9KbiC3tzbFM5ilwAuA9baQJ3W3kUy7550FMk-tEMq0Wb4bEeZnyttncG1cvK0n1zbcisyx75kNEVptUBxlNHY5pabmVpsh7mn68ciyvQ9nQtoX33enve2BgMKybxu1m-djMfOhxSNxKXXnKYkYbdXO3lI7F_IxlzI86ghWn-IrBeaJQ-B0m8Js8xJr4vVu9BcP0gCHFYhgVneHt1WxXtejqFcG2d_M',
             expires_in: 3600,
             token_type: 'Bearer',
             valid_until: '2020-08-27 21:08:42.380052'
@@ -45,10 +45,9 @@ var sessionChecker = (req, res, next) => {
           utcLastModified: '2020-08-22T15:25:34.693Z',
           utcOffset: -360,
           utcTermsAndConditionsAcceptDate: '2020-08-23T14:56:17.69Z'
-          }
-          */
+          }*/
          next();
-  } else {
+ } else {
       res.render('login');
   }
 };

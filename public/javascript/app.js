@@ -279,6 +279,22 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
   $scope.error = "";
   $scope.customFilter = "";
   $scope.tableParams = new NgTableParams({}, {});
+  $scope.filterTxt = "Filtrar";
+
+  $scope.$watch('customFilter', function(newTerm,oldTerm){
+    $scope.tableParams.filter({name: $scope.customFilter});
+    if($scope.customFilter != ""){
+      $scope.filterTxt = "Limpiar";
+    }else{
+      $scope.filterTxt = "Filtrar";
+    }
+  });
+
+  $scope.filter = function(){
+    if($scope.customFilter != ""){
+      $scope.customFilter = "";
+    }
+  }
 
   $scope.refreshRoutes = function(){
     $http.get('./api/routes').then(function(response){
@@ -304,7 +320,7 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
   //custom filter
   $scope.$watch('customFilter', function(newTerm,oldTerm){
     $scope.tableParams.filter({ruta: $scope.customFilter});
-  })
+  });
 
   $scope.showImport = function(){
     $scope.error = "";
@@ -604,6 +620,24 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
 app.controller('RoutesCtl', function($scope, $http, NgTableParams){
   $scope.route = {};
   $scope.points = [];
+  $scope.customFilter = "";
+  $scope.tableParams = new NgTableParams({}, {});
+  $scope.filterTxt = "Filtrar";
+
+  $scope.$watch('customFilter', function(newTerm,oldTerm){
+    $scope.tableParams.filter({name: $scope.customFilter});
+    if($scope.customFilter != ""){
+      $scope.filterTxt = "Limpiar";
+    }else{
+      $scope.filterTxt = "Filtrar";
+    }
+  });
+
+  $scope.filter = function(){
+    if($scope.customFilter != ""){
+      $scope.customFilter = "";
+    }
+  }
 
   $scope.refreshRoutes = function(){
     $http.get('./api/routes').then(function(response){
@@ -621,6 +655,24 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
   $scope.role = {};
   $scope.routeList=[];
   $scope.places = [];
+  $scope.customFilter = "";
+  $scope.tableParams = new NgTableParams({}, {});
+  $scope.filterTxt = "Filtrar";
+
+  $scope.$watch('customFilter', function(newTerm,oldTerm){
+    $scope.tableParams.filter({ruta: $scope.customFilter});
+    if($scope.customFilter != ""){
+      $scope.filterTxt = "Limpiar";
+    }else{
+      $scope.filterTxt = "Filtrar";
+    }
+  });
+
+  $scope.filter = function(){
+    if($scope.customFilter != ""){
+      $scope.customFilter = "";
+    }
+  }
 
   $scope.complete = function(search){
     if(search  && search.length > 2){
