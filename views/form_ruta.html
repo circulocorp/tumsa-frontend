@@ -48,8 +48,8 @@
                 </div>
               </div>
               <div class="col-md-4 mb-4">
-                <label for="firstName">Tiempo (Entre vueltas)</label>
-                <input type="text" class="form-control" id="nombre"  ng-model="route.time_rounds"  placeholder="" value="" required style="width: 200px">
+                <label for="firstName">Tiempo <small>(Entre vueltas)</small></label>
+                <input type="text" class="form-control" id="nombre"  ng-model="route.time_rounds"  placeholder="0" value="0" required style="width: 200px">
               </div>
               </div>
               <div class="row">
@@ -57,12 +57,11 @@
                 <div class="card shadow mb-4">
             <div class="card-header py-3">
               <div class="btn-group" role="group" aria-label="...">
-                <select id="newPoint" ng-model="point">
+                <select id="newPoint" ng-model="point" class="form-control">
                   <option value="{{point}}" ng-repeat="point in points">{{point.description}}</option>
                 </select>
-                &nbsp;
-                Minutos:
-                <input type="text" value="0" id="newTime"/>
+                &nbsp;&nbsp;&nbsp;
+                <input type="text" value="0" id="newTime" class="form-control" style="width:70px"/>
                 &nbsp;
                 <a href="#" ng-click="addPoint()" class="btn btn-primary" role="button" aria-pressed="true">Agregar</a>
               </div>

@@ -174,6 +174,17 @@ router.get('/dailyReport', function(req,res, next){
   request(options).pipe(res);
 });
 
+router.get('/report2/:date', function(req,res, next){
+
+  var url = API_URL+'/dayreport';
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token, "date":req.params.date},
+      method: 'POST'
+  };
+  request(options).pipe(res);
+});
+
 router.post('/calc_trip', function(req, res, next){
   var url = API_URL+'/calc_trip';
   var data = req.body;
@@ -348,8 +359,8 @@ router.post('/departures', function(req,res,next){
   var data = req.body;
   start_date = new Date(data.start_date);
   start_date.setHours(start_date.getHours(), start_date.getMinutes(), start_date.getSeconds(),0);
-  var sql = "INSERT INTO departures(nid,trip,vehicle,created,start_date,end_date,rounds,start_point,end_point,total_time,route,comments) values(uuid_generate_v4(),$1,$2,NOW(),$3,$4,$5,$6,$7,$8,$9,$10)";
-  pool.query(sql, [data.trip,data.vehicle,start_date,data.end_date,data.rounds,data.start_point,data.end_point,data.total_time,data.route,data.comments],(error,results)=> {
+  var sql = "INSERT INTO departures(nid,trip,vehicle,created,start_date,end_date,rounds,start_point,end_point,total_time,route,comments,delay) values(uuid_generate_v4(),$1,$2,NOW(),$3,$4,$5,$6,$7,$8,$9,$10,$11)";
+  pool.query(sql, [data.trip,data.vehicle,start_date,data.end_date,data.rounds,data.start_point,data.end_point,data.total_time,data.route,data.comments,data.delay],(error,results)=> {
     if(error){
       console.log(error);
     }
@@ -359,8 +370,8 @@ router.post('/departures', function(req,res,next){
 
 router.patch('/departures/:id', function(req, res, next){
   var data = req.body;
-  var sql = "update departures set trip=$2,vehicle=$3,start_date=$4,end_date=$5,rounds=$6,total_time=$7,start_point=$8,end_point=$9 where id=$1";
-  pool.query(sql, [req.params.id,data.route,data.vehicle,data.start_date,data.end_date,data.rounds,data.start_point,data.end_point],(error,results)=> {
+  var sql = "update departures set trip=$2,vehicle=$3,start_date=$4,end_date=$5,rounds=$6,total_time=$7,start_point=$8,end_point=$9,delay=$10 where id=$1";
+  pool.query(sql, [req.params.id,data.route,data.vehicle,data.start_date,data.end_date,data.rounds,data.start_point,data.end_point,data.delay],(error,results)=> {
     if(error){
       console.log(error);
     }
@@ -412,9 +423,9 @@ router.get('/roles/route/:route', function(req,res,next){
 
 router.post('/roles', function(req,res,next){
   var data = req.body;
-  var sql = "INSERT INTO roles(nid,hour,rounds,route,start_point,end_point,comments) \
-            values(uuid_generate_v4(),$1,$2,$3,$4,$5,$6)";
-  pool.query(sql, [data.hour, data.rounds, data.route,data.start_point,data.end_point,data.comments],(error,results)=> {
+  var sql = "INSERT INTO roles(nid,hour,rounds,route,start_point,end_point,comments,delay) \
+            values(uuid_generate_v4(),$1,$2,$3,$4,$5,$6,$7)";
+  pool.query(sql, [data.hour, data.rounds, data.route,data.start_point,data.end_point,data.comments,data.delay],(error,results)=> {
     if(error){
       console.log(error);
     }
@@ -425,8 +436,8 @@ router.post('/roles', function(req,res,next){
 router.patch('/roles/:id', function(req, res, next){
   var data = req.body;
   console.log(data);
-  var sql = "update roles set hour=$2,rounds=$3,route=$4,start_point=$5,end_point=$6,comments=$7 where nid=$1";
-  pool.query(sql, [req.params.id,data.hour,data.rounds,data.route,data.start_point,data.end_point,data.comments],(error,results)=> {
+  var sql = "update roles set hour=$2,rounds=$3,route=$4,start_point=$5,end_point=$6,comments=$7,delay=$8 where nid=$1";
+  pool.query(sql, [req.params.id,data.hour,data.rounds,data.route,data.start_point,data.end_point,data.comments,data.delay],(error,results)=> {
     if(error){
       console.log(error);
     }

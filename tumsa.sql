@@ -83,6 +83,7 @@ CREATE TABLE public.roles (
 ALTER TABLE public.roles ADD COLUMN start_point character varying;
 ALTER TABLE public.roles ADD COLUMN end_point character varying;
 ALTER TABLE public.roles ADD COLUMN comments text;
+ALTER TABLE public.roles ADD COLUMN delay numeric default 1;
 ALTER TABLE public.roles OWNER TO postgres;
 
 
@@ -115,6 +116,7 @@ CREATE TABLE public.departures (
 );
 
 ALTER TABLE public.departures ADD COLUMN comments text;
+ALTER TABLE public.departures ADD COLUMN delay numeric default;
 ALTER TABLE public.departures OWNER TO postgres;
 
 

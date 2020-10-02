@@ -61,7 +61,7 @@ function formatTime(date){
 }
 
 
-var app = angular.module('tumsa', ["ngTable","angularjs-datetime-picker", "ui.bootstrap"]);
+var app = angular.module('tumsa', ["ngTable","angularjs-datetime-picker", "ui.bootstrap", "ngAnimate","toastr"]);
 var map_token = 'pk.eyJ1IjoibWF1YmFycmVyYSIsImEiOiJjajhvdnVjeDQwN3k2MndwMXZkNzBoeW01In0.MFXZsAk84rNXSAmodkAGdg';
 
 
@@ -421,7 +421,7 @@ app.controller('ReportsCtl', function($scope, $http){
   }
 });
 
-app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
+app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
   $scope.viaje = {};
   $scope.vehicles = [];
   $scope.places = [];
@@ -465,59 +465,6 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
     });
   }
 
-  //Deprecated
-  $scope.calc_route = function(){
-    /*
-    $scope.calcs = [];
-    $scope.total_time = 0;
-    if($scope.viaje.route == null){
-      console.log("No route found");
-    }else{
-      var route = $scope.viaje.route;
-      var time = 0;
-      var started = 0;
-      for(var j=0;j<parseInt($scope.viaje.rounds);j++){
-      for(var i=0;i<route.points.places.length;i++){
-        var p = $scope.viaje.route.points.places[i];
-        var place = {}
-        place["id"] = p["id"];
-        place["description"] = p["description"];
-        start =  new Date($scope.viaje.start_date);
-        lastComment = JSON.parse(p["lastComment"]);
-        if(j == 0 && place["id"] != $scope.viaje.start_point && started == 0){
-          place["hour"] = time;
-          place["round"] = j+1;
-          $scope.calcs.push(place);
-          time = 0;
-        }else {
-          if(j == 0 && place["id"] == $scope.viaje.start_point && started == 0){
-            p["time"] = 0;
-            started = 1;
-          }
-          if(lastComment.length > 0){
-          for(var z=0;z<lastComment.length;z++){
-            cond = lastComment[z];
-              if(cond["key"] == route.name && (j+1) == parseInt(cond["vuelta"])){
-                time += parseInt(cond["add"]);
-              }else{
-                time += parseInt(p["time"]);
-              }
-            }
-          }else{
-            time += parseInt(p["time"]);
-          }
-          hour = formatDate(new Date(start.getTime() + time*60000));
-          place["hour"] = hour;
-          place["round"] = j+1;
-          $scope.calcs.push(place);
-         }
-      }
-        time += parseInt(route.time_rounds);
-      }
-      $scope.total_time = time;
-      */
-  }
-
   $scope.selectRole = function(){
     role = JSON.parse($scope.role);
     $scope.viaje.rounds = parseInt(role.rounds);
@@ -528,6 +475,7 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
     $scope.viaje.comments = role.comments;
     $scope.viaje.start_point = role.start_point;
     $scope.viaje.end_point = role.end_point;
+    $scope.viaje.delay = parseInt(role.delay);
     $scope.calc_route2();
   }
 
@@ -596,25 +544,32 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams){
     viaje["start_point"] = $scope.viaje.start_point;
     viaje["end_point"] = $scope.viaje.end_point;
     viaje["comments"] = $scope.viaje.comments;
+    viaje["delay"] = $scope.viaje.delay;
 
-    if($scope.viaje.nid == null || $scope.viaje.nid == ""){
-    $http.post('./api/departures', viaje).then(function(response){
-      if(response.status == 200){
-        window.location.href = './viajes';
+    if(viaje["vehicle"] != null && viaje["route"] != null) {
+      if($scope.viaje.nid == null || $scope.viaje.nid == ""){
+      $http.post('./api/departures', viaje).then(function(response){
+        if(response.status == 200){
+          window.location.href = './viajes';
+        }else{
+          toastr.error('No se pudo guardar el viaje');
+        }
+      });
       }else{
-        window.location.href = './viajes';
+        $http.patch('./api/departures/'+$scope.viaje.nid, viaje).then(function(response){
+        if(response.status == 200){
+          window.location.href = './viajes';
+        }else{
+          toastr.error('No se pudo guardar el viaje');
+        }
+        });
       }
-    });
-    }else{
-      $http.patch('./api/departures/'+$scope.viaje.nid, viaje).then(function(response){
-      if(response.status == 200){
-        window.location.href = './viajes';
-      }else{
-        window.location.href = './viajes';
-      }
-    });
-    }
+   }else{
+      toastr.warning('Se debe de seleccionar un vehiculo y una ruta');
+   }
+
   }
+
 });
 
 app.controller('RoutesCtl', function($scope, $http, NgTableParams){
@@ -650,7 +605,7 @@ app.controller('RoutesCtl', function($scope, $http, NgTableParams){
 });
 
 
-app.controller('RolesCtl', function($scope, $http, NgTableParams){
+app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
   $scope.ruta = "";
   $scope.role = {};
   $scope.routeList=[];
@@ -706,13 +661,14 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
   }
 
   $scope.edit_role = function(role){
-    console.log(role);
     $scope.role["nid"] = role["nid"];
     $scope.role["rounds"] = parseInt(role["rounds"]);
     $scope.role["route"] = role["route"];
     $scope.role["comments"] = role["comments"];
     $scope.ruta = role["ruta"];
     $scope.role["hour"] = new Date("1970-04-04 "+role["hour"]);
+    $scope.role["delay"] = parseInt(role["delay"]);
+
 
     $http.get('./api/routes/'+role["route"]).then(function(response){
       $scope.places = response.data[0]["points"]["places"];
@@ -732,6 +688,15 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
 
   $scope.saveRole = function(){
     var role = $scope.role;
+    if(!("hour" in role)){
+      toastr.warning('Debe de seleccionar un horario');
+      return 0;
+    }
+
+    if($scope.ruta == ""){
+      toastr.warning('Debe de seleccionar una ruta');
+      return 0;
+    }
     role["hour"] = formatTime(role["hour"]);
     if($scope.role.nid == null || $scope.role.nid == ""){
     $http.post('./api/roles', role).then(function(response){
@@ -740,7 +705,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
         $scope.refreshRoles();
         $scope.role = {};
       }else{
-        console.log("Error");
+        toastr.error('Hubo un error al guardar el rol');
       }
     });
     }else{
@@ -750,7 +715,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
         $scope.refreshRoles();
         $scope.role = {};
       }else{
-        console.log("Error");
+        toastr.error('Hubo un error al guardar el rol');
       }
     });
     }
@@ -761,7 +726,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams){
 });
 
 
-app.controller('RouteFormCtl', function($scope, $http, NgTableParams, $location){
+app.controller('RouteFormCtl', function($scope, $http, NgTableParams, $location, toastr){
   $scope.route = {};
   $scope.points = [];
   $scope.locations = []
@@ -810,12 +775,17 @@ app.controller('RouteFormCtl', function($scope, $http, NgTableParams, $location)
   $scope.addPoint = function(){
       var table = document.getElementById("dataset");
       var time = document.getElementById("newTime").value;
-      var point = JSON.parse($scope.point);
-      point["time"] = time;
-      var marker = new mapboxgl.Marker().setLngLat([point["centerLongitude"],point["centerLatitude"]]).addTo(map);
-      point["marker"] = marker;
-      $scope.locations.push(point);
-      $scope.drawLine()
+      console.log($scope.point);
+      try{
+        var point = JSON.parse($scope.point);
+        point["time"] = time;
+        var marker = new mapboxgl.Marker().setLngLat([point["centerLongitude"],point["centerLatitude"]]).addTo(map);
+        point["marker"] = marker;
+        $scope.locations.push(point);
+        $scope.drawLine()
+      }catch(except){
+        toastr.warning('Debe de seleccionar una geocerca');
+      }
   }
 
   $scope.drawLine = function(){
@@ -874,12 +844,19 @@ app.controller('RouteFormCtl', function($scope, $http, NgTableParams, $location)
       }
       route["points"].push(point);
     }
+
+    if(!("name" in route)){
+        toastr.warning('Se debe de colocar un nombre para la ruta');
+        return 0;
+    }
+
+    if(route["points"].length > 0){
     if($scope.route.nid == null || $scope.route.nid == ""){
     $http.post('./api/routes', route).then(function(response){
       if(response.status == 200){
         window.location.href = './rutas';
       }else{
-        window.location.href = './rutas';
+        toastr.danger('No se pudo guardar la ruta');
       }
     });
     }else{
@@ -887,9 +864,12 @@ app.controller('RouteFormCtl', function($scope, $http, NgTableParams, $location)
       if(response.status == 200){
         window.location.href = './rutas';
       }else{
-        window.location.href = './rutas';
+        toastr.danger('No se pudo guardar la ruta');
       }
     });
+    }
+    }else{
+      toastr.warning('Se necesita agregar puntos a esta ruta');
     }
   }
 

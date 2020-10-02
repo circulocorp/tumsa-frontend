@@ -35,30 +35,34 @@
               <div class="table-responsive">
               <form autocomplete="off">
               <div class="row">
-              <div class="col-md-3 mb-3">
+              <div class="col-md-2 mb-2">
                 <label for="firstName">Unidad</label>
                 <input type="hidden" class="form-control" id="nid"  ng-model="viaje.nid" >
-                <input type="text" class="form-control" id="vehicle"  ng-model="vehicle" ng-keyup="complete2(vehicle)" required style="width:200px">
+                <input type="text" class="form-control" id="vehicle"  ng-model="vehicle" ng-keyup="complete2(vehicle)" required style="width:150px">
                 <ul class="list-group">
                   <li class="list-group-item" ng-repeat="vehicle in vehiclesList" ng-click="fillTextbox2(vehicle)">{{vehicle.registration}} - {{vehicle.description}}</li>
                 </ul>
               </div>
-              <div class="col-md-3 mb-3">
+              <div class="col-md-2 mb-2">
                 <label for="firstName">Ruta</label>
-                <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required style="width:200px">
+                <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required style="width:150px">
                 <ul class="list-group">
                   <li class="list-group-item" ng-repeat="route in routeList" ng-click="fillTextbox(route)">{{route.name}}</li>
                 </ul>
               </div>
               <div class="col-md-2 mb-2">
                 <label for="rol">Rol</label>
-                <select id="rol" ng-change="selectRole()" ng-model="role" class="form-control" style="width:150px">
+                <select id="rol" ng-change="selectRole()" ng-model="role" class="form-control" style="width:100px">
                   <option value="{{role}}" ng-repeat="role in roles">{{role.hour}}</option>
                 </select>
               </div>
-              <div class="col-md-3 mb-3">
+              <div class="col-md-2 mb-2">
                 <label for="firstName">Vueltas</label>
-                <input type="number" style="width:100px" class="form-control" id="vueltas" ng-model="viaje.rounds" placeholder="">
+                <input type="number" min="1" style="width:70px" class="form-control" id="vueltas" ng-model="viaje.rounds" placeholder="1" min="1">
+              </div>
+              <div class="col-md-2 mb-2">
+                <label for="firstName">Tolerancia</label>
+                <input type="number" min="1" style="width:70px" class="form-control" id="tolerancia" ng-model="viaje.delay" placeholder="1" min="1">
               </div>
             </div>
             <div class="row">

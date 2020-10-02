@@ -48,17 +48,6 @@
             <div class="card-body">
               <div class="table-responsive">
                 <table ng-table="tableParams" class="table table-bordered" id="dataTable" width="100%" cellspacing="0" show-filter="false">
-                  <!--
-                  <thead>
-                    <tr>
-                      <th>&nbsp;</th>
-                      <th>Nombre</th>
-                      <th>Tiempo Total</th>
-                      <th>Fecha Creado</th>
-                      <th>Activo</th>
-                    </tr>
-                  </thead>
-                -->
                   <tbody>
                     <tr ng-repeat="route in $data">
                       <td><a href="./form_ruta?id={{route.nid}}" role="button"><i class="fas fa-route"></i></a></td>

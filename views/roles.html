@@ -106,13 +106,17 @@
                         El nombre es obligatorio
                       </div>
                     </div>
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-2 mb-2">
                       <label for="vueltas">Vueltas</label>
-                      <input type="number" style="width:100px" class="form-control" id="vueltas" ng-model="role.rounds" placeholder="">
+                      <input type="number" style="width:70px" class="form-control" id="vueltas" ng-model="role.rounds" min="1">
                     </div>
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-3 mb-3">
                       <label for="vueltas">Hora</label>
                       <input type="time" style="width:100px" class="form-control" id="hora" ng-model="role.hour" placeholder="">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                      <label for="tolerancia">Tolerancia</label>
+                      <input type="number" style="width:70px" class="form-control" id="tolerancia" ng-model="role.delay" min="1" placeholder="1">
                     </div>
                   </div>
                   <div class="row">
