@@ -404,9 +404,9 @@ app.controller('ReportsCtl', function($scope, $http){
 
   $scope.$watch('report2.date', function(newVal, oldVal){
     if(newVal){
-      document.getElementById("downloadReport2").disabled = false;
+      $scope.report2.ready = "";
     }else{
-      document.getElementById("downloadReport2").disabled = true;
+      $scope.report2.ready = "disabled";
     }
   });
 
