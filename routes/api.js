@@ -137,7 +137,7 @@ router.post('/papeletas', function(req, res, next){
   var url = API_URL+'/createtrips';
   var options = {
       uri: url,
-      json: {"token": req.session.user.token, "day":data.day, "camiones":data.camiones, "ruta":data.ruta},
+      json: {"token": req.session.user.token,"day":data.day,"camiones":data.camiones,"ruta":data.ruta,"delay":data.delay},
       method: 'POST'
   };
   request(options, (err, re, body) => {

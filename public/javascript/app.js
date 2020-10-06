@@ -271,7 +271,7 @@ app.controller('PointsCtl', function ($scope, $http) {
 });
 
 
-app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
+app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, toastr){
   $scope.viaje = {};
   $scope.routes = [];
   $scope.papeletas = {};
@@ -303,9 +303,9 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
   }
 
   $scope.refreshRoles = function(){
+    console.log($scope.papeletas);
     $http.get('./api/roles/route/'+$scope.papeletas.ruta).then(function(response){
       $scope.roles = response.data;
-      console.log(response.data);
     });
   }
 
@@ -324,7 +324,7 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
 
   $scope.showImport = function(){
     $scope.error = "";
-    $scope.papeletas = {};
+    $scope.papeletas = {delay:1};
     $('#tripModal').modal('show');
   }
 
@@ -335,9 +335,9 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
 
   $scope.validate = function(){
     var errors = 0;
-    console.log($scope.papeletas)
+    console.log($scope.roles);
     if($scope.papeletas.camiones == null || $scope.papeletas.camiones.split(',').length != $scope.roles.length){
-      $scope.error = "El numero de camiones no coincide con el numero de roles"
+      toastr.error('El numero de camiones no coincide con el numero de roles');
       errors++;
     }
     return errors;
@@ -348,8 +348,13 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
     valid = $scope.validate();
     if(valid == 0){
       $http.post('./api/papeletas', papeletas).then(function(response){
-        $scope.refreshViajes();
-        $('#tripModal').modal('hide');
+        if(response["data"]["status"] == "ok"){
+          $scope.refreshViajes();
+          $('#tripModal').modal('hide');
+          toastr.info('Viajes creados correctamente para la ruta');
+        }else{
+          toastr.error('Hubo un error al crear las papeletas para la ruta');
+        }
       });
     }
   }
@@ -395,7 +400,15 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload){
 
 app.controller('ReportsCtl', function($scope, $http){
 
-  $scope.report2 = {};
+  $scope.report2 = {"ready": "disabled"};
+
+  $scope.$watch('report2.date', function(newVal, oldVal){
+    if(newVal){
+      document.getElementById("downloadReport2").disabled = false;
+    }else{
+      document.getElementById("downloadReport2").disabled = true;
+    }
+  });
 
   $scope.daily = function(){
     $http({

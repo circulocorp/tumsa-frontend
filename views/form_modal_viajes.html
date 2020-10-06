@@ -18,16 +18,20 @@
                 <div class="row">
                     <div class="col-md-5 mb-5">
                       <label for="ruta">Ruta</label>
-                      <select id="ruta" ng-change="refreshRoles()" ng-model="papeletas.ruta" class="form-control" style="width:200px">
+                      <select id="ruta" ng-change="refreshRoles()" ng-model="papeletas.ruta" class="form-control" style="width:150px">
                           <option value="{{ruta.nid}}" ng-repeat="ruta in routes">{{ruta.name}}</option>
                       </select>
                     </div>
+                    <div class="col-md-2 mb-2">
+                      <label for="firstName">Tolerancia</label>
+                      <input type="number" min="1" style="width:70px" class="form-control" id="tolerancia" ng-model="papeletas.delay" min="1">
+                  </div>
                     
                   </div>
                   <div class="row">
                     <div class="col-md-3 mb-3">
                       <label for="ruta">Fecha</label>
-                      <input type="text" ng-model="papeletas.day" class="form-control" style="width:200px"/>
+                      <input datetime-picker style="width:200px" class="form-control" ng-model="papeletas.day" date-format="yyyy-MM-dd"/>
                     </div>
                   </div>
                   <div class="row">
