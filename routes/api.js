@@ -379,6 +379,17 @@ router.patch('/departures/:id', function(req, res, next){
   });
 });
 
+router.delete('/departures/:id', function(req, res, next){
+  var sql = "delete from departures where nid=$1";
+  pool.query(sql, [req.params.id], (error,results) => {
+    if(error){
+      console.log(error);
+     res.status(500).json({"status":"error"}); 
+    }
+    res.status(200).json({"status":"ok"});
+  });
+});
+
 router.get('/roles', function(req,res,next){
   var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route order by ru.name,r.hour asc";
   pool.query(sql, (error, results) => {

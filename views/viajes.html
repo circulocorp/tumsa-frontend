@@ -80,7 +80,7 @@
                   <tbody>
                     <tr ng-repeat="departure in $data">
                       <td><a href="./api/downloadReport/{{departure.nid}}" target="_blank" role="button"><i class="fas fa-file-pdf" title="Descargar Reporte"></i></a>&nbsp;
-                        <a href="#" role="button"><i class="fas fa-clone" title="Crear similar"></i></a>
+                        <a href="#" ng-click="askRemove(departure)" role="button"><i class="fas fa-trash" title="Borrar"></i></a>
                       </td>
                       <td data-title="'Ruta'" sortable="'ruta'" filter="{ruta: 'text'}">{{departure.ruta}}</td>
                       <td data-title="'Economico'" sortable="'eco'" filter="{eco: 'text'}">{{departure.eco}}</td>

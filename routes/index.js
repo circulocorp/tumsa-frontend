@@ -21,7 +21,7 @@ const pool = new Pool({
 
 var sessionChecker = (req, res, next) => {
   if (req.session && req.session.user) {
-     /* req.session.user = {
+      /*req.session.user = {
           description: 'API TUMSA',
           firstName: 'API',
           id: '53a90630-9897-4cd5-922b-3556ab293e39',
@@ -30,7 +30,7 @@ var sessionChecker = (req, res, next) => {
           surname: 'TUMSA',
           timeZoneId: 11,
           token: {
-            access_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IkVGMUUxMkVFOTQ1NTdBNDg5MzlCMUJBNjJFQUUxQzFBN0ZDNTY2MkQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI3eDRTN3BSVmVraVRteHVtTHE0Y0duX0ZaaTAifQ.eyJuYmYiOjE2MDE5NDUyMDYsImV4cCI6MTYwMTk0ODgwNiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQvcmVzb3VyY2VzIiwibXo2LWFwaSJdLCJjbGllbnRfaWQiOiJtei1hM3RlayIsInN1YiI6IjUzYTkwNjMwLTk4OTctNGNkNS05MjJiLTM1NTZhYjI5M2UzOSIsImF1dGhfdGltZSI6MTYwMTk0NTIwNiwiaWRwIjoibG9jYWwiLCJtel91c2VybmFtZSI6IlRVTVNBLUFQSSIsIm16X3VzZXJncm91cF9pZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsIm16X3NoYXJkX2NvZGUiOiJBM1RFSyIsInNjb3BlIjpbIm16X3VzZXJuYW1lIiwib3BlbmlkIiwibXo2LWFwaS5hbGwiXSwiYW1yIjpbInB3ZCJdfQ.FDQzA-q5YXor6MnwFiZg_-ntjNg9O4eLOP5_jP1_TKd5BAWqZ7yT2Zniatgqm9IhtO2kBNTQXhh8xMCZizBDKUQAtEHzb-ae__owFLLM4AbK_kl_S1aR5wdNi-CVdD6epFDIPkdin_HuduyPw6su4nXBEg9a_Aj-nkxZWjMJScn5pH3239_HKg8-18D74RD9yvyR0qFAFcwoyxuUcTr6lChRKeyzMsQYz3MAgF3uesptmFTByIvhRs6RZBylepgH0tAxYR08KoP85H3ATlUj92s_HYiOwV0uPpf8bOxIfo7HpC1zCf7sMNwle2MoCzFRmcdiMbh9Xg0J1bk8avSDIfi_VHH1teP-GlDQglm9tSbTcHj_uoC0uv170eFNeiwteO5RjhQlzbhR2H6sjXMqMSGj2rNBPvt6m8gJsw_IrKYwyze6n4BMUoljtMwtfoPEyy_blMlSqIutzCoeekSJmprIaZblWxvijnrIH2THobM-YZZnanKZ2kgL8tV3syrm-XduV9oUBYLMKuT6-ox3EG5H4FzP7_ZpJkQVmbH3TYi23BGhO5PbcsVVo1g9Sn8iuyN2yv9r4WZzPR6gotV8g2ygEFbK5nIGwkx2YXX11BLWQzcp4IDa1baun8NuFvzJN4hrij86ReLEXea0hSTlpT21vOVNatKpIKL7Dek1Zcs',
+            access_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IkVGMUUxMkVFOTQ1NTdBNDg5MzlCMUJBNjJFQUUxQzFBN0ZDNTY2MkQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI3eDRTN3BSVmVraVRteHVtTHE0Y0duX0ZaaTAifQ.eyJuYmYiOjE2MDIwMzY1MDksImV4cCI6MTYwMjA0MDEwOSwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQvcmVzb3VyY2VzIiwibXo2LWFwaSJdLCJjbGllbnRfaWQiOiJtei1hM3RlayIsInN1YiI6IjUzYTkwNjMwLTk4OTctNGNkNS05MjJiLTM1NTZhYjI5M2UzOSIsImF1dGhfdGltZSI6MTYwMjAzNjUwOSwiaWRwIjoibG9jYWwiLCJtel91c2VybmFtZSI6IlRVTVNBLUFQSSIsIm16X3VzZXJncm91cF9pZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsIm16X3NoYXJkX2NvZGUiOiJBM1RFSyIsInNjb3BlIjpbIm16X3VzZXJuYW1lIiwib3BlbmlkIiwibXo2LWFwaS5hbGwiXSwiYW1yIjpbInB3ZCJdfQ.uhI7dSVefoMQkwb_AT9JG5Rkwy7A4Arlpf0VmQmcB59mnNFXtUSrm-J3eeb2aCVPsSRAMJh0dOGcakaULWCOLpRvu1W8yKTi21qdn-sOz-R1pcpFrmbDqGPkT6DJ5gbhZL9RXmIv3V1FIy_4R_xMweFJy3J-PHwDshW1XX4pGmQBJOqxGJMIO_uoccnvDjFQFdTDKPFLCzMF5M9xpVd0FvA6dKqFf-xrxKC5mT9t0iHP_eWcZaiyWvn_eQkURvt3Uy4es0OHRIiYx8GmGEyYj5uOoXO0FFEGRkW5J6uCblB8eyuIhX0TrdJTFZ_7-LmiXFrBqftRvDuTeoUn8tQJfKmz-DmeydHHDk1P2_Uad_5Vylk3P1iSznhVBpnGKXQ-XMOWo1wN0V574vU_Bwaovm_2DqC3WWknYR5WEbQmo-MjFJb8J4YWJggb1cv3ceGdoN-Z9DXkNvBbHQ7QTwta3v82G3hVNgk1lOTtwKv7DvCa7h4aS2kggh7MAZoRE5TquaynSbFLZeM_7-7BXNScsKQRTm2rZrcPAY2wnh8xaPyz4E-6i4wmsFbwsKYIC78AnK1d8QoSKq_xWNv2Gr-9BPz8I0tutOhHcBlrTwwxvgSgnTnwbmzqQ56dulk8AMnW5wri_iqWe9oERKZ5TJcwCBJv6pi1T7gdyCnplO88L_s',
             expires_in: 3600,
             token_type: 'Bearer',
             valid_until: '2020-08-27 21:08:42.380052'

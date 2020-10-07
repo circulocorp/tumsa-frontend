@@ -322,6 +322,31 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
     $scope.tableParams.filter({ruta: $scope.customFilter});
   });
 
+  $scope.askRemove = function(viaje){
+    $scope.viaje = viaje;
+    $('#askDelete').modal('show');
+  }
+
+  $scope.hideRemoveTrip = function(){
+    $scope.viaje = {};
+    $('#askDelete').modal('hide');
+  }
+
+  $scope.removeTrip = function(){
+    var viaje = $scope.viaje;
+    $http.delete('./api/departures/'+viaje.nid).then(function(response){
+      if(response["data"]["status"] == "ok"){
+          $scope.refreshViajes();
+          $('#tripModal').modal('hide');
+          toastr.info('Viaje eliminado correctamente');
+        }else{
+          toastr.error('Hubo un error al borrar el viaje');
+        }
+        $('#askDelete').modal('hide');
+        $scope.viaje = {};
+    });
+  }
+
   $scope.showImport = function(){
     $scope.error = "";
     $scope.papeletas = {delay:1};
