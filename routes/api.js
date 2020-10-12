@@ -323,17 +323,31 @@ router.patch('/routes/:nid',function(req,res,next){
 });
 
 router.get('/departures', function(req,res,next){
-  var sql = "SELECT * FROM departures order by created desc";
+  var date = req.query.date;
+  var sql = "SELECT * FROM departures where start_date >= '"+date+" 00:00:00' and end_date <= '"+date+" 23:59:59'  order by created desc";
+  console.log(sql);
   pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
     }
     var data = [];
     if("rows" in results){
+      console.log(results.rows.length);
     for(var i=0;i<results.rows.length;i++){
       d = results.rows[i];
       d["ruta"] = d["route"]["name"];
       d["eco"] = d["vehicle"]["description"];
+      var places = d["route"]["points"]["places"];
+      for(var j=0;j<places.length;j++){
+        if(d["start_point"] == places[j]["id"]){
+          d["inicio"] = places[j]["description"];
+          break;
+        }
+        if(d["end_point"] == places[j]["id"]){
+          d["fin"] = places[j]["description"]
+          break;
+        }
+      }
       data.push(d);
     }
     }

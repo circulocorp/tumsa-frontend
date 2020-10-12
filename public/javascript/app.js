@@ -280,19 +280,18 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
   $scope.customFilter = "";
   $scope.tableParams = new NgTableParams({}, {});
   $scope.filterTxt = "Filtrar";
-
-  $scope.$watch('customFilter', function(newTerm,oldTerm){
-    $scope.tableParams.filter({name: $scope.customFilter});
-    if($scope.customFilter != ""){
-      $scope.filterTxt = "Limpiar";
-    }else{
-      $scope.filterTxt = "Filtrar";
-    }
-  });
+  var fecha = "";
 
   $scope.filter = function(){
-    if($scope.customFilter != ""){
+
+    if ($scope.filterTxt == "Limpiar"){
+      $scope.filterTxt = "Filtrar";
       $scope.customFilter = "";
+      $scope.fecha = "";
+      $scope.refreshViajes();
+    }else if($scope.filterTxt == "Filtrar"){
+      $scope.filterTxt = "Limpiar";
+      $scope.refreshViajes($scope.fecha);
     }
   }
 
@@ -303,7 +302,6 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
   }
 
   $scope.refreshRoles = function(){
-    console.log($scope.papeletas);
     $http.get('./api/roles/route/'+$scope.papeletas.ruta).then(function(response){
       $scope.roles = response.data;
     });
@@ -311,8 +309,14 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
 
   $scope.refreshRoutes();
 
-  $scope.refreshViajes = function(){
-    $http.get('./api/departures').then(function(response){
+  $scope.refreshViajes = function(fecha){
+    if(fecha == "" || fecha == null){
+      d = new Date();
+      date = d.getFullYear()+"-"+(d.getMonth()+1)+ "-"+d.getDate();
+    }else{
+      date = fecha;
+    }
+    $http.get('./api/departures?date='+date).then(function(response){
       $scope.tableParams = new NgTableParams({},{ dataset: response.data });
     });
   }

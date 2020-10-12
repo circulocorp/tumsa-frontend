@@ -39,7 +39,9 @@
                   </div>
                 </div>
                 <form class="form-inline my-6 my-lg-0">
-                    <input ng-model="customFilter" class="form-control mr-sm-2" type="search" placeholder="Filtrar" aria-label="Search">
+                    <input datetime-picker class="form-control mr-sm-2" type="search" placeholder="Fecha" ng-model="fecha" date-format="yyyy-MM-dd" future-only/>
+                    &nbsp;
+                    <input ng-model="customFilter" class="form-control mr-sm-2" type="search" placeholder="Ruta" aria-label="Search">
                     <button ng-click="filter()" class="btn btn-outline-success my-2 my-sm-0" type="submit">{{filterTxt}}</button>
                   </form>
               </nav>
@@ -84,9 +86,10 @@
                       </td>
                       <td data-title="'Ruta'" sortable="'ruta'" filter="{ruta: 'text'}">{{departure.ruta}}</td>
                       <td data-title="'Economico'" sortable="'eco'" filter="{eco: 'text'}">{{departure.eco}}</td>
-                      <td data-title="'Tiempo Total (mins.)'" sortable="'total_time'" filter="{total_time: 'text'}">{{departure.total_time}}&nbsp;mins.</td>
-                      <td data-title="'Inicio'" sortable="'start_date'" filter="{start_date: 'text'}">{{departure.start_date | date:'short' }}</td>
-                      <td data-title="'Fin'" sortable="'end_date'" filter="{end_date: 'text'}">{{departure.end_date | date:'short' }}</td>
+                      <td data-title="'Inicio'" sortable="'inicio'" filter="{eco: 'text'}">{{departure.inicio}}</td>
+                      <td data-title="'Fin'" sortable="'fin'" filter="{eco: 'text'}">{{departure.fin}}</td>
+                      <td data-title="'Fecha Inicio'" sortable="'start_date'" filter="{start_date: 'text'}">{{departure.start_date | date:'short' }}</td>
+                      <td data-title="'Fecha Fin'" sortable="'end_date'" filter="{end_date: 'text'}">{{departure.end_date | date:'short' }}</td>
                     </tr>
                   </tbody>
                 </table>
