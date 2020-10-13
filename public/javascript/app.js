@@ -430,6 +430,10 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
 app.controller('ReportsCtl', function($scope, $http){
 
   $scope.report2 = {"ready": "disabled"};
+  $scope.ruta = "";
+  $scope.route = {};
+  $scope.routeList = [];
+
 
   $scope.$watch('report2.date', function(newVal, oldVal){
     if(newVal){
@@ -461,6 +465,31 @@ app.controller('ReportsCtl', function($scope, $http){
       document.body.removeChild(a); //remove the link "a"
     });
   }
+
+  $scope.complete = function(search){
+    if(search  && search.length > 2){
+      $http.get('./api/routes/name/'+search).then(function(response){
+          routes =  response.data;
+          var output=[];
+          angular.forEach(routes,function(route){
+            if(route.name.toLowerCase().indexOf(search.toLowerCase())>=0){
+              output.push(route);
+            }
+          });
+          $scope.routeList=output;
+      });   
+    }else{
+      $scope.routeList=[];
+    }
+  }
+
+  $scope.fillTextbox=function(route){
+      $scope.route = route;
+      $scope.ruta = route.name;
+      $scope.routeList=null;
+  }
+
+
 });
 
 app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){

@@ -174,12 +174,13 @@ router.get('/dailyReport', function(req,res, next){
   request(options).pipe(res);
 });
 
-router.get('/report2/:date', function(req,res, next){
-
+router.get('/report2', function(req,res, next){
+  var date = req.query.date;
+  var route = req.query.route;
   var url = API_URL+'/dayreport';
   var options = {
       uri: url,
-      json: {"token": req.session.user.token, "date":req.params.date},
+      json: {"token": req.session.user.token, "date":date,"route":route},
       method: 'POST'
   };
   request(options).pipe(res);
@@ -341,11 +342,9 @@ router.get('/departures', function(req,res,next){
       for(var j=0;j<places.length;j++){
         if(d["start_point"] == places[j]["id"]){
           d["inicio"] = places[j]["description"];
-          break;
         }
         if(d["end_point"] == places[j]["id"]){
           d["fin"] = places[j]["description"]
-          break;
         }
       }
       data.push(d);
