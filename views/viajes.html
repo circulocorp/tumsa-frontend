@@ -39,7 +39,7 @@
                   </div>
                 </div>
                 <form class="form-inline my-6 my-lg-0">
-                    <input datetime-picker class="form-control mr-sm-2" type="search" placeholder="Fecha" ng-model="fecha" date-format="yyyy-MM-dd" future-only/>
+                    <input type="date" class="form-control mr-sm-2" type="search" placeholder="Fecha" ng-model="fecha" pattern="\d{4}-\d{2}-\d{2}" id="date"/>
                     &nbsp;
                     <input ng-model="customFilter" class="form-control mr-sm-2" type="search" placeholder="Ruta" aria-label="Search">
                     <button ng-click="filter()" class="btn btn-outline-success my-2 my-sm-0" type="submit">{{filterTxt}}</button>

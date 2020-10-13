@@ -310,11 +310,12 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
   $scope.refreshRoutes();
 
   $scope.refreshViajes = function(fecha){
+    
     if(fecha == "" || fecha == null){
       d = new Date();
       date = d.getFullYear()+"-"+(d.getMonth()+1)+ "-"+d.getDate();
     }else{
-      date = fecha;
+      date = document.getElementById('date').value;
     }
     $http.get('./api/departures?date='+date).then(function(response){
       $scope.tableParams = new NgTableParams({},{ dataset: response.data });

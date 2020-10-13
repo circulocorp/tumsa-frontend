@@ -325,8 +325,7 @@ router.patch('/routes/:nid',function(req,res,next){
 
 router.get('/departures', function(req,res,next){
   var date = req.query.date;
-  var sql = "SELECT * FROM departures where start_date >= '"+date+" 00:00:00' and end_date <= '"+date+" 23:59:59'  order by created desc";
-  console.log(sql);
+  var sql = "SELECT * FROM departures where start_date >= '"+date+" 00:00:00' and start_date <= '"+date+" 23:59:59'  order by created desc";
   pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
