@@ -29,17 +29,23 @@
           <div class="row">
 
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-5 col-md-6 mb-4">
               <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">
-                        <a href="./api/dailyReport" target="_blank" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Papeletas de Hoy</a>
-                      </div>
+                      Ruta:
+                      <form autocomplete="off" style="z-index: -100;">
+                        <input type="text" class="form-control" id="route"  ng-model="ruta2" ng-keyup="complete(ruta2, 2)" required>
+                      <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="route in routeList2" ng-click="fillTextbox(route, 2)">{{route.name}}</li>
+                      </ul>
+                        </form>
                     </div>
-                    <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    <div class="col mr-2">
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <a href="./api/dailyReport?route={{route.nid}}" target="_blank" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Papeletas de Hoy</a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -62,9 +68,9 @@
                     <div class="col mr-2">
                       Ruta:
                       <form autocomplete="off" style="z-index: -100;">
-                        <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required>
+                        <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta,1)" required>
                       <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="route in routeList" ng-click="fillTextbox(route)">{{route.name}}</li>
+                        <li class="list-group-item" ng-repeat="route in routeList" ng-click="fillTextbox(route, 1)">{{route.name}}</li>
                       </ul>
                         </form>
                     </div>

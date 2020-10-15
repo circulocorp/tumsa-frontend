@@ -434,6 +434,7 @@ app.controller('ReportsCtl', function($scope, $http){
   $scope.ruta = "";
   $scope.route = {};
   $scope.routeList = [];
+  $scope.routeList2 = [];
 
 
   $scope.$watch('report2.date', function(newVal, oldVal){
@@ -467,7 +468,7 @@ app.controller('ReportsCtl', function($scope, $http){
     });
   }
 
-  $scope.complete = function(search){
+  $scope.complete = function(search, version){
     if(search  && search.length > 2){
       $http.get('./api/routes/name/'+search).then(function(response){
           routes =  response.data;
@@ -477,17 +478,27 @@ app.controller('ReportsCtl', function($scope, $http){
               output.push(route);
             }
           });
-          $scope.routeList=output;
+          if(version == 1){
+            $scope.routeList=output;
+          }else{
+            $scope.routeList2=output;
+          }
       });   
     }else{
       $scope.routeList=[];
+      $scope.routeList2=[];
     }
   }
 
-  $scope.fillTextbox=function(route){
+  $scope.fillTextbox=function(route,version){
       $scope.route = route;
-      $scope.ruta = route.name;
+      if(version==1){
+        $scope.ruta = route.name;
+      }else{
+        $scope.ruta2 = route.name;
+      }
       $scope.routeList=null;
+      $scope.routeList2=null;
   }
 
 

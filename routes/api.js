@@ -166,9 +166,10 @@ router.get('/downloadReport/:viaje', function(req, res, next){
 
 router.get('/dailyReport', function(req,res, next){
   var url = API_URL+'/dailyreport';
+  var route = req.query.route;
   var options = {
       uri: url,
-      json: {"token": req.session.user.token},
+      json: {"token": req.session.user.token, "route": route},
       method: 'POST'
   };
   request(options).pipe(res);
