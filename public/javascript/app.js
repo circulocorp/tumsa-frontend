@@ -65,6 +65,8 @@ var app = angular.module('tumsa', ["ngTable","angularjs-datetime-picker", "ui.bo
 var map_token = 'pk.eyJ1IjoibWF1YmFycmVyYSIsImEiOiJjajhvdnVjeDQwN3k2MndwMXZkNzBoeW01In0.MFXZsAk84rNXSAmodkAGdg';
 
 
+
+
 //Directive
 app.directive('fileModel', ['$parse', function ($parse) {
         return {
@@ -99,6 +101,8 @@ app.service('fileUpload', ['$http', function ($http) {
            );
         }
 }]);
+
+
 //General controller
 
 app.controller('HomeCtl', function($scope, $http){
@@ -114,50 +118,6 @@ app.controller('HomeCtl', function($scope, $http){
 });
 
 //Usuarios Controller
-
-app.controller('UsuariosCtl', function ($scope, $http, NgTableParams) {
-    
-  $scope.user = {};
-  $scope.perfiles = []
-
-	$scope.editUser = function(nid){
-		$scope.user = users;
-    $('#modalvehicleForm').modal();
-    $http.patch('/users/'+nid, vehicle).then(function(response){
-      $scope.refreshUsers();
-      $scope.cancelUsers();
-    });
-	}
-
-  $scope.saveUsers = function(){
-    var user = $scope.user;
-    $http.post('./api/users', user).then(function(response){
-      $scope.refreshUsers();
-      $scope.cancelUsers();
-    });
-  }
-
-  $scope.newUser = function(){
-    $http.get('./api/profiles').then(function(response){
-      $scope.perfiles = response.data;
-      $('#usersModalForm').modal('show');    
-    });
-  }
-
-  $scope.refreshUsers = function(){
-    $http.get('./api/users').then(function(response){
-      console.log(response.data);
-      $scope.tableParams = new NgTableParams({filter:{}}, { dataset: response.data });
-    });
-  }
-
-  $scope.cancelUser = function(){
-    $scope.user = {}
-   $('#modalvehicleForm').modal('hide'); 
-  }
-
-  $scope.refreshUsers();
-});
 
 app.controller('VehiclesCtl', function($scope, $http, NgTableParams){
   $scope.vehicles = [];
@@ -281,6 +241,17 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
   $scope.tableParams = new NgTableParams({}, {});
   $scope.filterTxt = "Filtrar";
   var fecha = "";
+
+
+  $scope.current_user = {};
+
+  $scope.findSession = function(){
+    $http.get('./api/getsession').then(function(response){
+      $scope.current_user = response.data;
+    });
+  }
+
+  $scope.findSession();
 
   $scope.filter = function(){
 
@@ -504,6 +475,51 @@ app.controller('ReportsCtl', function($scope, $http){
 
 });
 
+app.controller('UsuariosCtl', function ($scope, $http, NgTableParams) {
+    
+  $scope.user = {};
+  $scope.perfiles = []
+
+  $scope.editUser = function(nid){
+    $scope.user = users;
+    $('#modalvehicleForm').modal();
+    $http.patch('/users/'+nid, vehicle).then(function(response){
+      $scope.refreshUsers();
+      $scope.cancelUsers();
+    });
+  }
+
+  $scope.saveUsers = function(){
+    var user = $scope.user;
+    $http.post('./api/users', user).then(function(response){
+      $scope.refreshUsers();
+      $scope.cancelUsers();
+    });
+  }
+
+  $scope.newUser = function(){
+    $http.get('./api/profiles').then(function(response){
+      $scope.perfiles = response.data;
+      $('#usersModalForm').modal('show');    
+    });
+  }
+
+  $scope.refreshUsers = function(){
+    $http.get('./api/users').then(function(response){
+      console.log(response.data);
+      $scope.tableParams = new NgTableParams({filter:{}}, { dataset: response.data });
+    });
+  }
+
+  $scope.cancelUser = function(){
+    $scope.user = {}
+   $('#modalvehicleForm').modal('hide'); 
+  }
+
+  $scope.refreshUsers();
+});
+
+
 app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
   $scope.viaje = {};
   $scope.vehicles = [];
@@ -516,6 +532,7 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
   $scope.total_time = 0;
   $scope.roles = [];
   $scope.role = {};
+
 
   $scope.$watch('viaje.rounds', function(newVal, oldVal){
     $scope.change_enddate();
@@ -662,6 +679,16 @@ app.controller('RoutesCtl', function($scope, $http, NgTableParams){
   $scope.tableParams = new NgTableParams({}, {});
   $scope.filterTxt = "Filtrar";
 
+  $scope.current_user = {};
+
+  $scope.findSession = function(){
+    $http.get('./api/getsession').then(function(response){
+      $scope.current_user = response.data;
+    });
+  }
+
+  $scope.findSession();
+
   $scope.$watch('customFilter', function(newTerm,oldTerm){
     $scope.tableParams.filter({name: $scope.customFilter});
     if($scope.customFilter != ""){
@@ -696,6 +723,16 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
   $scope.customFilter = "";
   $scope.tableParams = new NgTableParams({}, {});
   $scope.filterTxt = "Filtrar";
+
+  $scope.current_user = {};
+
+  $scope.findSession = function(){
+    $http.get('./api/getsession').then(function(response){
+      $scope.current_user = response.data;
+    });
+  }
+
+  $scope.findSession();
 
   $scope.$watch('customFilter', function(newTerm,oldTerm){
     $scope.tableParams.filter({ruta: $scope.customFilter});

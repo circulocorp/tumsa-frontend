@@ -324,6 +324,41 @@ router.patch('/routes/:nid',function(req,res,next){
   });
 });
 
+
+router.get('/departures', function(req, res, next){
+  var date = req.query.date;
+  var url = API_URL+'/viajes';
+  var route = req.query.route;
+  var options = {
+      uri: url,
+      json: {"token": req.session.user.token, "date": date},
+      method: 'POST'
+  };
+  request(options, (err, re, body) => {
+    var data = body;
+    console.log(data);
+    var viajes = [];
+    for(var i=0;i<data.length;i++){
+      d = data[i];
+      d["ruta"] = d["route"]["name"];
+      d["eco"] = d["vehicle"]["description"];
+      var places = d["route"]["points"]["places"];
+      for(var j=0;j<places.length;j++){
+        if(d["start_point"] == places[j]["id"]){
+          d["inicio"] = places[j]["description"];
+        }
+        if(d["end_point"] == places[j]["id"]){
+          d["fin"] = places[j]["description"]
+        }
+      }
+      viajes.push(d);
+    }
+    res.send(viajes);
+  });
+});
+
+/*
+
 router.get('/departures', function(req,res,next){
   var date = req.query.date;
   var sql = "SELECT * FROM departures where start_date >= '"+date+" 00:00:00' and start_date <= '"+date+" 23:59:59'  order by created desc";
@@ -353,6 +388,7 @@ router.get('/departures', function(req,res,next){
     res.status(200).json(data);
   });
 });
+*/
 
 router.get('/departures/:nid', function(req,res,next){
   var sql = "SELECT * FROM departures where nid=$1 order by created desc LIMIT 100";

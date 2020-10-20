@@ -20,31 +20,33 @@ const pool = new Pool({
 
 
 var sessionChecker = (req, res, next) => {
-  if (req.session && req.session.user) {
-     /*req.session.user = {
-          description: 'API TUMSA',
-          firstName: 'API',
-          id: '53a90630-9897-4cd5-922b-3556ab293e39',
+ if (req.session && req.session.user) {
+    /* req.session.user = {
+          description: "Josue Virgen",
+          firstName: "Josue",
+          id: "53a90630-9897-4cd5-922b-3556ab293e39",
           isUserGroupAdmin: true,
-          language_Code: 'ES-ES',
-          surname: 'TUMSA',
+          language_Code: "ES-ES",
+          phoneHome: "{\"perfil\":\"read\"}",
+          perfil: "read",
+          surname: "Virgen",
           timeZoneId: 11,
-          token: {
-            access_token: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IkVGMUUxMkVFOTQ1NTdBNDg5MzlCMUJBNjJFQUUxQzFBN0ZDNTY2MkQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI3eDRTN3BSVmVraVRteHVtTHE0Y0duX0ZaaTAifQ.eyJuYmYiOjE2MDI4MDE1MTQsImV4cCI6MTYwMjgwNTExNCwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQvcmVzb3VyY2VzIiwibXo2LWFwaSJdLCJjbGllbnRfaWQiOiJtei1hM3RlayIsInN1YiI6IjUzYTkwNjMwLTk4OTctNGNkNS05MjJiLTM1NTZhYjI5M2UzOSIsImF1dGhfdGltZSI6MTYwMjgwMTUxNCwiaWRwIjoibG9jYWwiLCJtel91c2VybmFtZSI6IlRVTVNBLUFQSSIsIm16X3VzZXJncm91cF9pZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsIm16X3NoYXJkX2NvZGUiOiJBM1RFSyIsInNjb3BlIjpbIm16X3VzZXJuYW1lIiwib3BlbmlkIiwibXo2LWFwaS5hbGwiXSwiYW1yIjpbInB3ZCJdfQ.Mk77IIi722pPBtmQf3Yu0utIQGGIY6-kPW84JBlEso8qE4eqk8GrsBSHL62b0FCbMv3bs8nQY7i-2hV2rt4pvPbUl2q8cvteBbhggOCvbXKVolXNWJ1yy14CasSpP-ddZPmg3nAaKOai6J2Enn3dh7krwyJpCytBf_SFiI7ur7v4KlW67yP18x7_U7qlR5G9I9Jl_-fs0VgOcRfE0nFmjb3Gm8T8l00moJglzPYdcYik5ZCAlzzSw8yl5TP4uCpSjqukRi2jTAO_5wuqIbbYbGvyXNeAaqZXU6-aH1LM_5KWAYzic-hTPWLjPr8iOUxTKZbTqL525WxkupgzlQCXWjMgPksc-ecnkFq6WR0Qs5i1OFxdI3UjvpvG9pCKr416w9u-2D88VH8ob-UaWXocv8inDWF-FxHkJK_l0BH9wCAsgVHFk7VuIMYxL6sPWDnJb8lyPe0yaZPWNpSRlysIZuq1hUTnRfrNZM1YoeHmmAZOUPmbboVz5BC6i6EGzqUXO5n78Zvbj6RiHcvbZrzjM5lKRFFNd5EmoP4bnU4s-OdY7fvDptxIcJ4hdIDi8JLELmDaYgUvkNRO4m-M_JBexwSQQr39rhW-PIiIJOh1TCFxq1XbHw_Or1OI6NRCl1Co9fxNqvYb8YMzq_gG-fY9l-Z7iTcn6cB4jsHfXbzebpI',
-            expires_in: 3600,
-            token_type: 'Bearer',
-            valid_until: '2020-08-27 21:08:42.380052'
-          },
-          unitOfMeasureDistance_Id: 'a54104b8-2a37-471f-92db-3f98c60b966d',
-          unitOfMeasureFluid_Id: '01f4a7f9-55b1-4b6d-a65a-eb85f48fdfb8',
-          userGroup_Id: '3d3f4f50-6966-49f9-8760-1889837d2417',
-          username: 'TUMSA-API',
-          utcDaylightSavingEnd: '2020-10-25T07:00:00Z',
-          utcDaylightSavingOffset: -300,
-          utcDaylightSavingStart: '2020-04-05T08:00:00Z',
-          utcLastModified: '2020-08-22T15:25:34.693Z',
-          utcOffset: -360,
-          utcTermsAndConditionsAcceptDate: '2020-08-23T14:56:17.69Z'
+        token: {
+          access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IkVGMUUxMkVFOTQ1NTdBNDg5MzlCMUJBNjJFQUUxQzFBN0ZDNTY2MkQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI3eDRTN3BSVmVraVRteHVtTHE0Y0duX0ZaaTAifQ.eyJuYmYiOjE2MDMyMzI4MzIsImV4cCI6MTYwMzIzNjQzMiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQiLCJhdWQiOlsiaHR0cHM6Ly9sb2dpbi5tem9uZXdlYi5uZXQvcmVzb3VyY2VzIiwibXo2LWFwaSJdLCJjbGllbnRfaWQiOiJtei1hM3RlayIsInN1YiI6Ijg3ZWM3MjIyLTVkMzItNGE3My04ZmE0LTdlNTI4MDBmZGM2NyIsImF1dGhfdGltZSI6MTYwMzIzMjgzMiwiaWRwIjoibG9jYWwiLCJtel91c2VybmFtZSI6IlRVQ0EganZpcmdlbiIsIm16X3VzZXJncm91cF9pZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsIm16X3NoYXJkX2NvZGUiOiJBM1RFSyIsInNjb3BlIjpbIm16X3VzZXJuYW1lIiwib3BlbmlkIiwibXo2LWFwaS5hbGwiXSwiYW1yIjpbInB3ZCJdfQ.YHY2TG0PZoDBfet7HHf_jRK-01ir7W8vsToHsn1sc1mSnEFAk6FWQ3cz8yts-HkEJXo2sBkl4zfjoYb3qw6tBMlD0D6dEMdk54l5z3GjoXqqIAHmTe-ThRZVN5BhhE9nLfIY7lg_5FQTPyLS--VeH8GpmLPstzxPTkMxz-kVttR-lSOIwzMLRN-__MpgqOeblhp1XaBL50tICr_k1wJGi88kIIfRMP4BrwEVJs0QeGKDiOMiDMqZUTxuxEcMrZBKkP2q-pHhqo8PAXImRH8FiqzRc6DGa77MPyWCgGdVPlnB1BIXGzQxWHuCZW4iS1OVdqXKar08jxgUY11YdIID0_6RXu68C3fiiFMEkCEor87xdpDt5BdGIdNn-C4dg4JA1JW1dp6E3vn-fYeEQLAbKBKNx0huI6N2tGAjJne0jAJnwKGdCtYhzfp5TG59X8xS3KFC2jPDbUo46_12jfGWdZTgmkxdf0H4nObxfBv960rM_wkPVNaDZGCUdBt8PPDU_5PI5cJ6-PX2QUzAtGvW6YrIMWtddPAae8rpG1L897HQ_0wJLVBHwhRCD_1Fx9Dnkr9UFdld1aC5X1cdzkoYEbBd_4WQGz2BRuegwPEZU-a4HfBeSzkBgLxRw8oxe3esU2MBlbgBqHws8y45bi8oHscHJYYa8cftc-Pyc1o-ftY",
+          expires_in: 3600,
+          token_type: "Bearer",
+          valid_until: "2020-10-20 18:13:44.629918"
+  },
+  unitOfMeasureDistance_Id: "a54104b8-2a37-471f-92db-3f98c60b966d",
+  unitOfMeasureFluid_Id: "01f4a7f9-55b1-4b6d-a65a-eb85f48fdfb8",
+  userGroup_Id: "3d3f4f50-6966-49f9-8760-1889837d2417",
+  username: "Semovi",
+  utcDaylightSavingEnd: "2020-10-25T07:00:00Z",
+  utcDaylightSavingOffset: -300,
+  utcDaylightSavingStart: "2020-04-05T08:00:00Z",
+  utcLastModified: "2020-10-20T01:11:16.043Z",
+  utcOffset: -360,
+  utcTermsAndConditionsAcceptDate: "2020-08-23T14:56:17.69Z"
           }*/
          next();
   } else {
@@ -65,7 +67,7 @@ router.get('/', sessionChecker, (req,res) => {
 
 router.get('/users', sessionChecker, (req, res) =>{
   var current = req.session.user;
-  if(current.perfil == "Admins"){
+  if(current.perfil == "admin"){
     res.render('users');
   }else{
     res.render('404');
@@ -84,7 +86,7 @@ router.get('/rutas', sessionChecker, (req, res) =>{
 
 router.get('/roles', sessionChecker, (req, res)=>{
   var current = req.session.user;
-  res.render('roles');
+    res.render('roles');
 });
 
 router.get('/reportes', sessionChecker, (req, res)=>{
@@ -94,12 +96,20 @@ router.get('/reportes', sessionChecker, (req, res)=>{
 
 router.get('/form_ruta', sessionChecker, (req, res) =>{
   var current = req.session.user;
+  if(current.perfil == "admin"){
   res.render('form_ruta', { route: req.query.id });
+  }else{
+    res.render('404');
+  }
 });
 
 router.get('/form_viaje', sessionChecker, (req, res) =>{
   var current = req.session.user;
-  res.render('form_viaje', { viaje: req.query.id });
+  if(current.perfil != "read"){
+    res.render('form_viaje', { viaje: req.query.id });
+  }else{
+    res.render('404');
+  }
 });
 
 
