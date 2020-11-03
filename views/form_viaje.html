@@ -45,10 +45,9 @@
               </div>
               <div class="col-md-2 mb-2">
                 <label for="firstName">Ruta</label>
-                <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required style="width:150px">
-                <ul class="list-group">
-                  <li class="list-group-item" ng-repeat="route in routeList" ng-click="fillTextbox(route)">{{route.name}}</li>
-                </ul>
+                <select id="ruta" ng-change="fillTextbox()" ng-model="ruta" class="form-control" style="width:150px">
+                    <option value="{{ruta.nid}}" ng-repeat="ruta in routeList">{{ruta.name}}</option>
+                </select>
               </div>
               <div class="col-md-2 mb-2">
                 <label for="rol">Rol</label>

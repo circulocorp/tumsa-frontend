@@ -94,12 +94,8 @@
                 <div class="row">
                     <div class="col-md-4 mb-4">
                       <label for="ruta">Ruta</label>
-                      <input type="text" class="form-control" id="route"  ng-model="ruta" ng-keyup="complete(ruta)" required>
-                      <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="route in routeList" ng-click="fillTextbox(route)">{{route.name}}</li>
-                      </ul>
-                      <input type="hidden" class="form-control" id="route"  ng-model="role.route" >
-                      <input type="hidden" class="form-control" id="nid"  ng-model="role.nid" >
+                      <select id="route" ng-change="selectRoute(role.route)" ng-model="role.route" class="form-control" style="width:100px" ng-options="route.name for route in routeList track by route.nid">
+                      </select>
                       <div class="invalid-feedback">
                         El nombre es obligatorio
                       </div>
@@ -118,17 +114,21 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-5 mb-5">
+                    <div class="col-md-4 mb-4">
                       <label for="vueltas">Punto Inicial</label>
-                      <select id="rol" ng-model="role.start_point" class="form-control" style="width:150px">
+                      <select id="rol" ng-model="role.start_point" class="form-control" style="width:120px">
                         <option value="{{place.id}}" ng-repeat="place in places">{{place.description}}</option>
                       </select>
                     </div>
-                    <div class="col-md-5 mb-5">
+                    <div class="col-md-4 mb-4">
                       <label for="vueltas">Punto Final</label>
-                      <select id="rol" ng-model="role.end_point" class="form-control" style="width:150px">
+                      <select id="rol" ng-model="role.end_point" class="form-control" style="width:120px">
                         <option value="{{place.id}}" ng-repeat="place in places">{{place.description}}</option>
                       </select>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                      <label for="priority">Prioridad</label>
+                       <input type="number" style="width:70px" class="form-control" id="priority" ng-model="role.priority" min="0">
                     </div>
                 </div>
                 <div class="row">

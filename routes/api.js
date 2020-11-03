@@ -440,7 +440,7 @@ router.delete('/departures/:id', function(req, res, next){
 });
 
 router.get('/roles', function(req,res,next){
-  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route order by ru.name,r.hour asc";
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route order by r.priority desc,r.hour asc";
   pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
@@ -454,7 +454,7 @@ router.get('/roles', function(req,res,next){
 });
 
 router.get('/roles/:nid', function(req,res,next){
-  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and r.nid=$1 order by ru.name,r.hour asc";
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and r.nid=$1 order by r.priority desc,r.hour asc";
   pool.query(sql, [req.params.nid], (error, results) => {
     if (error) {
       console.log(error);
@@ -468,7 +468,7 @@ router.get('/roles/:nid', function(req,res,next){
 });
 
 router.get('/roles/route/:route', function(req,res,next){
-  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and ru.nid=$1";
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and ru.nid=$1 order by r.priority desc,r.hour asc";
   pool.query(sql, [req.params.route], (error, results) => {
     if (error) {
       console.log(error);
@@ -483,9 +483,9 @@ router.get('/roles/route/:route', function(req,res,next){
 
 router.post('/roles', function(req,res,next){
   var data = req.body;
-  var sql = "INSERT INTO roles(nid,hour,rounds,route,start_point,end_point,comments,delay) \
-            values(uuid_generate_v4(),$1,$2,$3,$4,$5,$6,$7)";
-  pool.query(sql, [data.hour, data.rounds, data.route,data.start_point,data.end_point,data.comments,data.delay],(error,results)=> {
+  var sql = "INSERT INTO roles(nid,hour,rounds,route,start_point,end_point,comments,delay,priority) \
+            values(uuid_generate_v4(),$1,$2,$3,$4,$5,$6,$7,$8)";
+  pool.query(sql, [data.hour, data.rounds, data.route,data.start_point,data.end_point,data.comments,data.delay,data.priority],(error,results)=> {
     if(error){
       console.log(error);
     }
@@ -495,9 +495,8 @@ router.post('/roles', function(req,res,next){
 
 router.patch('/roles/:id', function(req, res, next){
   var data = req.body;
-  console.log(data);
-  var sql = "update roles set hour=$2,rounds=$3,route=$4,start_point=$5,end_point=$6,comments=$7,delay=$8 where nid=$1";
-  pool.query(sql, [req.params.id,data.hour,data.rounds,data.route,data.start_point,data.end_point,data.comments,data.delay],(error,results)=> {
+  var sql = "update roles set hour=$2,rounds=$3,route=$4,start_point=$5,end_point=$6,comments=$7,delay=$8,priority=$9 where nid=$1";
+  pool.query(sql, [req.params.id,data.hour,data.rounds,data.route,data.start_point,data.end_point,data.comments,data.delay,data.priority],(error,results)=> {
     if(error){
       console.log(error);
     }

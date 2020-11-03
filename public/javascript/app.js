@@ -472,6 +472,13 @@ app.controller('ReportsCtl', function($scope, $http){
       $scope.routeList2=null;
   }
 
+  $scope.getRoutes = function(){
+    $http.get('./api/routes').then(function(response){
+      $scope.routeList = response.data;
+    });
+  }
+
+  $scope.getRoutes();
 
 });
 
@@ -602,6 +609,12 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
      }); 
   }
 
+   $scope.getRoutes = function(){
+    $http.get('./api/routes').then(function(response){
+      $scope.routeList = response.data;
+    });
+  }
+
   $scope.complete = function(search){
     if(search  && search.length > 2){
       $http.get('./api/routes/name/'+search).then(function(response){
@@ -619,14 +632,16 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
     }
   }
 
-  $scope.fillTextbox=function(route){
-      $scope.viaje.route = route;
-      $scope.places = route.points.places;
-      $scope.routeList=null;
-      $scope.ruta = route.name;
-      $scope.searchRoles(route.nid);
-      $scope.viaje.start_point = $scope.places[0].id;
-      $scope.viaje.end_point = $scope.places[$scope.places.length - 1].id;
+  $scope.fillTextbox=function(){
+
+      $http.get('./api/routes/'+$scope.ruta).then(function(response){
+        route = response.data[0];
+        $scope.viaje.route = route;
+        $scope.places = route.points.places;
+        $scope.searchRoles(route.nid);
+        $scope.viaje.start_point = $scope.places[0].id;
+        $scope.viaje.end_point = $scope.places[$scope.places.length - 1].id;
+      });
   }
 
   $scope.fillTextbox2=function(vehicle){
@@ -669,6 +684,8 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
    }
 
   }
+
+  $scope.getRoutes();
 
 });
 
@@ -766,11 +783,18 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
     }
   }
 
-  $scope.fillTextbox=function(route){
-      $scope.role.route = route.nid;
-      $scope.routeList=null;
-      $scope.ruta = route.name;
-      $scope.places = route.points.places;
+  $scope.selectRoute=function(route){
+      //$scope.role.route = route.nid;
+      //$scope.routeList=null;
+      //$scope.ruta = route.name;
+      $http.get('./api/routes/'+route["nid"]).then(function(response){
+        console.log(response.data);
+        $scope.places = response.data[0]["points"]["places"];
+        //$scope.role["start_point"] = role["start_point"]
+        //$scope.role["end_point"] = role["end_point"]
+      });
+
+      console.log($scope.role);
   }
 
 
@@ -780,15 +804,23 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
     });
   }
 
+  $scope.getRoutes = function(){
+    $http.get('./api/routes').then(function(response){
+      $scope.routeList = response.data;
+    });
+  }
+
   $scope.edit_role = function(role){
     $scope.role["nid"] = role["nid"];
     $scope.role["rounds"] = parseInt(role["rounds"]);
-    $scope.role["route"] = role["route"];
     $scope.role["comments"] = role["comments"];
     $scope.ruta = role["ruta"];
     $scope.role["hour"] = new Date("1970-04-04 "+role["hour"]);
     $scope.role["delay"] = parseInt(role["delay"]);
+    $scope.getRoutes();
 
+    $scope.role["route"] = role["route"];
+    console.log($scope.role);
 
     $http.get('./api/routes/'+role["route"]).then(function(response){
       $scope.places = response.data[0]["points"]["places"];
@@ -803,17 +835,19 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
     $scope.role = {}
     $scope.ruta = "";
     $scope.places = [];
+    $scope.getRoutes();
     $('#roleModal').modal('show');
   }
 
   $scope.saveRole = function(){
     var role = $scope.role;
+    role["route"] = $scope.role["route"]["nid"];
     if(!("hour" in role)){
       toastr.warning('Debe de seleccionar un horario');
       return 0;
     }
 
-    if($scope.ruta == ""){
+    if(role["route"] == ""){
       toastr.warning('Debe de seleccionar una ruta');
       return 0;
     }

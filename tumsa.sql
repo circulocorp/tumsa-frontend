@@ -84,6 +84,7 @@ ALTER TABLE public.roles ADD COLUMN start_point character varying;
 ALTER TABLE public.roles ADD COLUMN end_point character varying;
 ALTER TABLE public.roles ADD COLUMN comments text;
 ALTER TABLE public.roles ADD COLUMN delay numeric default 1;
+ALTER TABLE public.roles ADD COLUMN priority numeric default 0;
 ALTER TABLE public.roles OWNER TO postgres;
 
 
