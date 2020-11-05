@@ -289,6 +289,7 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
       date = document.getElementById('date').value;
     }
     $http.get('./api/departures?date='+date).then(function(response){
+      console.log(response.data);
       $scope.tableParams = new NgTableParams({},{ dataset: response.data });
     });
   }
@@ -336,7 +337,6 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
 
   $scope.validate = function(){
     var errors = 0;
-    console.log($scope.roles);
     if($scope.papeletas.camiones == null || $scope.papeletas.camiones.split(',').length != $scope.roles.length){
       toastr.error('El numero de camiones no coincide con el numero de roles');
       errors++;
@@ -661,6 +661,9 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
     viaje["comments"] = $scope.viaje.comments;
     viaje["delay"] = $scope.viaje.delay;
 
+    if(viaje["delay"] == ""){
+      viaje["delay"] = 1;
+    }
     if(viaje["vehicle"] != null && viaje["route"] != null) {
       if($scope.viaje.nid == null || $scope.viaje.nid == ""){
       $http.post('./api/departures', viaje).then(function(response){
@@ -684,7 +687,6 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
    }
 
   }
-
   $scope.getRoutes();
 
 });
@@ -784,17 +786,10 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
   }
 
   $scope.selectRoute=function(route){
-      //$scope.role.route = route.nid;
-      //$scope.routeList=null;
-      //$scope.ruta = route.name;
-      $http.get('./api/routes/'+route["nid"]).then(function(response){
-        console.log(response.data);
+      $http.get('./api/routes/'+$scope.role["route"]).then(function(response){
         $scope.places = response.data[0]["points"]["places"];
-        //$scope.role["start_point"] = role["start_point"]
-        //$scope.role["end_point"] = role["end_point"]
+        
       });
-
-      console.log($scope.role);
   }
 
 
@@ -814,13 +809,10 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
     $scope.role["nid"] = role["nid"];
     $scope.role["rounds"] = parseInt(role["rounds"]);
     $scope.role["comments"] = role["comments"];
-    $scope.ruta = role["ruta"];
     $scope.role["hour"] = new Date("1970-04-04 "+role["hour"]);
     $scope.role["delay"] = parseInt(role["delay"]);
-    $scope.getRoutes();
-
-    $scope.role["route"] = role["route"];
-    console.log($scope.role);
+    $scope.role["priority"] = parseInt(role["priority"]);
+    $scope.role["route"] = role["route"]
 
     $http.get('./api/routes/'+role["route"]).then(function(response){
       $scope.places = response.data[0]["points"]["places"];
@@ -833,15 +825,15 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
 
   $scope.newRole  = function(){
     $scope.role = {}
-    $scope.ruta = "";
     $scope.places = [];
+    $scope.routeList = [];
     $scope.getRoutes();
     $('#roleModal').modal('show');
   }
 
   $scope.saveRole = function(){
     var role = $scope.role;
-    role["route"] = $scope.role["route"]["nid"];
+    role["route"] = $scope.role["route"];
     if(!("hour" in role)){
       toastr.warning('Debe de seleccionar un horario');
       return 0;
@@ -858,6 +850,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
         $('#roleModal').modal('hide');
         $scope.refreshRoles();
         $scope.role = {};
+        toastr.success('Rol creado correctamente');
       }else{
         toastr.error('Hubo un error al guardar el rol');
       }
@@ -868,6 +861,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
         $('#roleModal').modal('hide');
         $scope.refreshRoles();
         $scope.role = {};
+        toastr.success('Rol actualizado correctamente');
       }else{
         toastr.error('Hubo un error al guardar el rol');
       }
@@ -875,6 +869,7 @@ app.controller('RolesCtl', function($scope, $http, NgTableParams, toastr){
     }
   }
 
+  $scope.getRoutes();
   $scope.refreshRoles();
 
 });

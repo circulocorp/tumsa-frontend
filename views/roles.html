@@ -68,6 +68,7 @@
                       <td data-title="'Ruta'" sortable="'ruta'" filter="{ruta: 'text'}">{{rol.ruta}}</td>
                       <td data-title="'Horario'" sortable="'hour'" filter="{hour: 'text'}">{{rol.hour}}</td>
                       <td data-title="'Vueltas'" sortable="'rounds'" filter="{rounds: 'text'}">{{rol.rounds}}</td>
+                      <td data-title="'Prioridad'" sortable="'priority'" filter="{rounds: 'text'}">{{rol.priority}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -94,7 +95,12 @@
                 <div class="row">
                     <div class="col-md-4 mb-4">
                       <label for="ruta">Ruta</label>
+                      <!--
                       <select id="route" ng-change="selectRoute(role.route)" ng-model="role.route" class="form-control" style="width:100px" ng-options="route.name for route in routeList track by route.nid">
+                      </select>
+                      -->                
+                      <select id="route" ng-change="selectRoute()" ng-model="role.route" class="form-control" style="width:120px">
+                        <option value="{{r.nid}}" ng-repeat="r in routeList">{{r.name}}</option>
                       </select>
                       <div class="invalid-feedback">
                         El nombre es obligatorio
