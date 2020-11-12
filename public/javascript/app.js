@@ -288,6 +288,7 @@ app.controller('ViajesCtl', function($scope, $http, NgTableParams, fileUpload, t
     }else{
       date = document.getElementById('date').value;
     }
+    console.log('./api/departures?date='+date);
     $http.get('./api/departures?date='+date).then(function(response){
       console.log(response.data);
       $scope.tableParams = new NgTableParams({},{ dataset: response.data });
