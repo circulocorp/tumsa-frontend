@@ -584,6 +584,7 @@ app.controller('ViajeFormCtl', function($scope, $http, NgTableParams, toastr){
     $scope.viaje.start_point = role.start_point;
     $scope.viaje.end_point = role.end_point;
     $scope.viaje.delay = parseInt(role.delay);
+    $scope.viaje.priority = parseInt(role.priority);
     $scope.calc_route2();
   }
 

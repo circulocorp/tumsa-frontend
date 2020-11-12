@@ -119,6 +119,7 @@ CREATE TABLE public.departures (
 ALTER TABLE public.departures ADD COLUMN comments text;
 ALTER TABLE public.departures ADD COLUMN delay numeric default 1;
 ALTER TABLE public.departures OWNER TO postgres;
+ALTER TABLE public.departures ADD COLUMN priority numeric default 0;
 
 
 --
