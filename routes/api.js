@@ -440,7 +440,7 @@ router.delete('/departures/:id', function(req, res, next){
 });
 
 router.get('/roles', function(req,res,next){
-  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route order by r.priority desc,r.hour asc";
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route order by r.priority asc,r.hour asc";
   pool.query(sql, (error, results) => {
     if (error) {
       console.log(error);
@@ -454,7 +454,7 @@ router.get('/roles', function(req,res,next){
 });
 
 router.get('/roles/:nid', function(req,res,next){
-  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and r.nid=$1 order by r.priority desc,r.hour asc";
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and r.nid=$1 order by r.priority asc,r.hour asc";
   pool.query(sql, [req.params.nid], (error, results) => {
     if (error) {
       console.log(error);
@@ -468,7 +468,7 @@ router.get('/roles/:nid', function(req,res,next){
 });
 
 router.get('/roles/route/:route', function(req,res,next){
-  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and ru.nid=$1 order by r.priority desc,r.hour asc";
+  var sql = "SELECT r.*,ru.name as ruta FROM roles r,routes ru where ru.nid=r.route and ru.nid=$1 order by r.priority asc,r.hour asc";
   pool.query(sql, [req.params.route], (error, results) => {
     if (error) {
       console.log(error);

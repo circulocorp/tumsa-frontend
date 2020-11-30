@@ -428,7 +428,6 @@ app.controller('ReportsCtl', function($scope, $http){
       var file = new Blob([data], {
         type: 'application/csv'
       });
-      console.log(file);
       var fileURL = URL.createObjectURL(file);
       var a = document.createElement('a');
       a.href = fileURL;

@@ -31,7 +31,12 @@
                   <button ng-if="current_user.perfil=='admin'" href="#" ng-click="newRole()" class="btn btn-primary" role="button" aria-pressed="true">Crear</button>
                   <button ng-if="current_user.perfil!='admin'" href="#" ng-click="newRole()" class="btn btn-primary" role="button" aria-pressed="true" disabled>Crear</button>
                   &nbsp;
+                  <!--
                     <input ng-model="customFilter" class="form-control mr-sm-2" type="search" placeholder="Filtrar" aria-label="Search">
+                  -->
+                    <select id="route" ng-model="customFilter" class="form-control" style="width:120px">
+                        <option value="{{r.name}}" ng-repeat="r in routeList">{{r.name}}</option>
+                    </select>
                     <button ng-click="filter()" class="btn btn-outline-success my-2 my-sm-0" type="submit">{{filterTxt}}</button>
                   </form>
               </nav>
