@@ -37,7 +37,8 @@
                       Ruta:
                       <form autocomplete="off" style="z-index: -100;">
                         <select id="ruta2" ng-model="ruta2" class="form-control" style="width:150px">
-                        <option value="{{route.id}}" ng-repeat="route in routeList">{{route.name}}</option>
+                          <option value="" selected>--Ruta--</option>
+                          <option value="{{route.nid}}" ng-repeat="route in routeList">{{route.name}}</option>
                       </select>
                         </form>
                     </div>
@@ -68,7 +69,8 @@
                       Ruta:
                       <form autocomplete="off" style="z-index: -100;">
                         <select id="ruta"  ng-model="ruta" class="form-control" style="width:180px">
-                        <option value="{{route.id}}" ng-repeat="route in routeList">{{route.name}}</option>
+                          <option value="" selected>--Ruta--</option>
+                        <option value="{{route.nid}}" ng-repeat="route in routeList">{{route.name}}</option>
                       </select>
                         </form>
                     </div>
