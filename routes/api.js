@@ -154,7 +154,7 @@ router.post('/uploadTrips', function(req, res, next){
 router.get('/downloadReport/:viaje', function(req, res, next){
   if(sessionChecker(req)){
   var viaje = req.params.viaje;
-  var url = API_URL+'/tripreport';
+  var url = API_URL+'/tripreport2';
   var options = {
       uri: url,
       json: {"token": req.session.user.token, "viaje":viaje},
@@ -165,7 +165,7 @@ router.get('/downloadReport/:viaje', function(req, res, next){
 });
 
 router.get('/dailyReport', function(req,res, next){
-  var url = API_URL+'/dailyreport';
+  var url = API_URL+'/dailyreport2';
   var route = req.query.route;
   var options = {
       uri: url,
@@ -178,7 +178,7 @@ router.get('/dailyReport', function(req,res, next){
 router.get('/report2', function(req,res, next){
   var date = req.query.date;
   var route = req.query.route;
-  var url = API_URL+'/dayreport';
+  var url = API_URL+'/dayreport2';
   var options = {
       uri: url,
       json: {"token": req.session.user.token, "date":date,"route":route},
