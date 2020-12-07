@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM 042469170563.dkr.ecr.us-east-1.amazonaws.com/node:10-alpine
 WORKDIR /app
 COPY . .
 RUN npm install .
